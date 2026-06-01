@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ONAQT — Work Force Management (Mobile Demo)</title>
+<style>
+/* ============================================================
+   ONAQT Mobile — functional demo (Option B · Forest Green)
+   Single file. No backend. Seed data in JS. Resets on reload.
+   ============================================================ */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --p:#2d5a3d; --pd:#1f3d2a; --pl:#4f9266;
+  --bg:#ece8e0; --card:#fdfbf7; --card2:#f3efe6;
+  --text:#2a2a26; --soft:#7a746a; --border:#e3ddd0;
+  --info:#bcd9f2; --info-tx:#2c5f8a;
+  --warn:#f3a64d; --warn-bg:#fbe6cc; --warn-tx:#9a5a12;
+  --ok:#cdeccd; --ok-tx:#2f6b3f;
+  --neutral:#e2ddd2; --neutral-tx:#9a9183;
+  --absent:#c0584f; --present:#d8efdd; --present-tx:#2f6b3f;
+  --submit:#1f3a55; --idle:#f3d9ef; --idle-tx:#9a3d86;
+  --r:16px; --rs:12px;
+  --shadow:0 6px 18px -10px rgba(0,0,0,.28);
+  --fs:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+html,body{height:100%}
+body{font-family:var(--fs);background:#d7dbe1;display:flex;align-items:center;justify-content:center;
+  min-height:100vh;color:var(--text);padding:0;overflow:hidden}
+body::before{content:"";position:fixed;inset:0;background:
+  radial-gradient(1100px 650px at 50% -8%,#f3f5f8 0,transparent 62%),
+  radial-gradient(900px 700px at 100% 112%,#c4c9d2 0,transparent 55%);z-index:0}
+
+/* phone shell */
+/* phone device frame */
+.device{position:relative;z-index:1;width:360px;max-width:100vw;height:min(800px,100dvh);
+  background:linear-gradient(150deg,#14181c,#05080a);border-radius:52px;padding:12px;
+  box-shadow:0 50px 110px -28px rgba(0,0,0,.55),0 0 0 2px #2a3038,inset 0 0 6px rgba(255,255,255,.08)}
+.dvol{position:absolute;left:-3px;top:118px;width:3px;height:44px;border-radius:3px 0 0 3px;background:#13171b;box-shadow:0 58px 0 #13171b}
+.dpwr{position:absolute;right:-3px;top:158px;width:3px;height:84px;border-radius:0 3px 3px 0;background:#13171b}
+.island{position:absolute;top:22px;left:50%;transform:translateX(-50%);width:106px;height:30px;background:#000;border-radius:16px;z-index:60}
+.home-ind{position:absolute;bottom:9px;left:50%;transform:translateX(-50%);width:128px;height:5px;border-radius:3px;background:var(--soft);opacity:.4;z-index:25;pointer-events:none}
+.shell{position:relative;width:100%;height:100%;background:var(--bg);overflow:hidden;display:flex;flex-direction:column;border-radius:44px}
+@media(max-width:480px){
+  .device{width:100vw;height:100dvh;border-radius:0;padding:0;box-shadow:none}
+  .dvol,.dpwr,.island,.home-ind{display:none}
+  .shell{border-radius:0}
+}
+
+.statusbar{height:44px;display:flex;align-items:center;justify-content:space-between;
+  padding:8px 24px 0;font-size:13px;font-weight:600;color:#fff;background:var(--p);flex:0 0 auto;transition:background .3s}
+.statusbar.light{color:var(--text);background:var(--bg)}
+.sb-r{display:flex;gap:6px;align-items:center;font-size:11px}
+
+.appbar{display:flex;align-items:center;justify-content:space-between;padding:10px 18px 16px;
+  background:var(--p);color:#fff;flex:0 0 auto;transition:background .3s}
+.appbar .left{display:flex;align-items:center;gap:14px}
+.appbar h1{font-size:20px;font-weight:700;letter-spacing:.2px}
+.appbar .ic{width:24px;height:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:21px;line-height:1}
+.appbar .ic svg{width:23px;height:23px;stroke:#fff;fill:none;stroke-width:2}
+.back{font-size:24px;cursor:pointer;line-height:1}
+
+.view{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+.view::-webkit-scrollbar{width:0}
+.pad{padding:18px 16px 90px}
+
+/* generic ui */
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:16px}
+.card+.card{margin-top:14px}
+.label{font-size:10px;letter-spacing:1.1px;text-transform:uppercase;color:var(--soft);font-weight:700}
+.chip{font-size:11px;font-weight:700;padding:5px 12px;border-radius:999px;display:inline-block}
+.chip.info{background:var(--info);color:var(--info-tx)}
+.chip.ok{background:var(--ok);color:var(--ok-tx)}
+.chip.warn{background:var(--warn-bg);color:var(--warn-tx)}
+.chip.neutral{background:var(--neutral);color:#6b6457}
+.row{display:flex;gap:10px}
+.grow{flex:1}
+.between{display:flex;align-items:center;justify-content:space-between}
+.muted{color:var(--soft)}
+.mt6{margin-top:6px}.mt8{margin-top:8px}.mt10{margin-top:10px}.mt12{margin-top:12px}.mt16{margin-top:16px}.mt20{margin-top:20px}
+.sectlabel{font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:var(--soft);font-weight:700;margin:18px 2px 9px}
+
+.btn{display:block;width:100%;text-align:center;padding:15px;border:none;border-radius:14px;font-weight:700;
+  font-size:15px;font-family:var(--fs);cursor:pointer;
+  background:linear-gradient(120deg,var(--pd),var(--pl));color:#fff;box-shadow:0 8px 18px -10px rgba(0,0,0,.5)}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{background:transparent;color:var(--p);border:1.6px solid var(--p);box-shadow:none}
+.btn.danger{background:transparent;color:var(--absent);border:1.6px solid var(--absent);box-shadow:none}
+.btn.sm{padding:10px 18px;width:auto;border-radius:11px;font-size:13px}
+
+.field{width:100%;border:1px solid var(--border);background:#fff;border-radius:12px;padding:14px 14px;
+  font-size:14px;font-family:var(--fs);color:var(--text);margin-top:0}
+.field::placeholder{color:#aaa298}
+select.field{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%237a746a' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;padding-right:40px;cursor:pointer}
+textarea.field{resize:none;min-height:96px}
+.flabel{font-size:13px;font-weight:600;color:var(--text);margin:0 2px 7px}
+.fgroup+.fgroup{margin-top:14px}
+
+/* segmented toggle */
+.seg{display:flex;background:var(--card2);border-radius:13px;padding:5px;gap:4px}
+.seg button{flex:1;border:none;background:transparent;padding:11px;border-radius:10px;font-weight:600;
+  font-size:13.5px;color:var(--soft);font-family:var(--fs);cursor:pointer;transition:.2s}
+.seg button.on{background:linear-gradient(120deg,var(--pd),var(--pl));color:#fff;font-weight:700}
+
+/* tabs */
+.tabs{display:flex;margin:16px 2px 0;position:relative;border-bottom:1px solid var(--card2)}
+.tabs button{flex:1;border:none;background:transparent;padding:10px 4px 12px;font-size:13.5px;font-weight:700;
+  color:var(--soft);font-family:var(--fs);cursor:pointer;transition:color .2s}
+.tabs button.on{color:var(--p)}
+.tab-ind{position:absolute;bottom:-1px;left:0;height:3px;background:var(--p);border-radius:3px 3px 0 0;width:0;
+  transform:translateX(0);transition:transform .28s cubic-bezier(.2,.7,.3,1),width .28s cubic-bezier(.2,.7,.3,1);pointer-events:none}
+.tab-viewport{overflow:hidden;margin-top:12px;touch-action:pan-y}
+.tab-track{display:flex;transition:transform .28s cubic-bezier(.2,.7,.3,1);will-change:transform}
+.tab-pane{flex:0 0 100%;width:100%;min-width:0}
+.tab-pane>.card:first-child{margin-top:0}
+
+/* drawer */
+.scrim{position:absolute;inset:0;background:rgba(20,20,18,.45);opacity:0;pointer-events:none;transition:.25s;z-index:30}
+.scrim.show{opacity:1;pointer-events:auto}
+.drawer{position:absolute;top:0;left:0;bottom:0;width:80%;max-width:320px;background:var(--bg);
+  transform:translateX(-104%);transition:transform .28s cubic-bezier(.4,0,.2,1);z-index:40;display:flex;flex-direction:column}
+.drawer.open{transform:translateX(0)}
+.drawer .head{background:var(--p);color:#fff;padding:26px 22px 22px}
+.drawer .logo{width:60px;height:60px;border-radius:18px;background:#fff;display:flex;align-items:center;justify-content:center;
+  color:var(--p);font-weight:800;font-size:30px;box-shadow:0 8px 18px -8px rgba(0,0,0,.4)}
+.drawer .uname{font-weight:700;font-size:17px;margin-top:14px}
+.drawer .umail{font-size:12.5px;opacity:.85;margin-top:2px}
+.drawer .nav{padding:10px 0;flex:1}
+.dnav{display:flex;align-items:center;gap:16px;padding:15px 22px;font-size:15px;font-weight:600;color:var(--text);cursor:pointer}
+.dnav .di{width:24px;display:flex;justify-content:center;font-size:18px}
+.dnav.active{background:var(--card2)}
+.dnav.active .dlabel{color:var(--p)}
+
+/* bottom sheet */
+.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--card);border-radius:22px 22px 0 0;z-index:45;
+  transform:translateY(102%);transition:transform .3s cubic-bezier(.4,0,.2,1);max-height:82%;display:flex;flex-direction:column}
+.sheet.open{transform:translateY(0)}
+.sheet .grip{width:40px;height:5px;border-radius:3px;background:var(--border);margin:11px auto 4px}
+.sheet .shead{padding:6px 22px 10px;font-size:18px;font-weight:700}
+.sheet .sbody{overflow-y:auto;padding:0 14px 26px}
+.theme-row{display:flex;align-items:center;gap:14px;padding:14px;border-radius:13px;cursor:pointer}
+.theme-row.sel{background:var(--card2)}
+.swatch{width:42px;height:42px;border-radius:11px;display:flex;overflow:hidden;flex:0 0 auto;border:1px solid rgba(0,0,0,.06)}
+.swatch i{flex:1;display:block}
+.theme-row .tname{flex:1;font-size:15px;font-weight:600}
+.theme-row .tick{color:var(--p);font-weight:800;font-size:18px;opacity:0}
+.theme-row.sel .tick{opacity:1}
+
+/* slide to start */
+.slider{position:relative;height:62px;border-radius:16px;background:linear-gradient(120deg,var(--pd),var(--pl));
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:15px;overflow:hidden;user-select:none}
+.slider .knob{position:absolute;left:6px;top:6px;width:50px;height:50px;border-radius:12px;background:#fff;color:var(--p);
+  display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 10px -3px rgba(0,0,0,.4);
+  cursor:grab;touch-action:none;z-index:2}
+.slider.done{background:linear-gradient(120deg,#5a4a1f,#b59038)}
+
+/* calendar */
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.cal-nav{width:36px;height:36px;border-radius:50%;background:var(--p);color:#fff;border:none;font-size:18px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.cal-title{font-weight:700;font-size:15px}
+.cal-tbl{width:100%;table-layout:fixed;border-collapse:separate;border-spacing:5px;margin:0 -5px}
+.cal-tbl th{font-size:11px;color:var(--soft);font-weight:700;text-align:center;padding-bottom:3px}
+.cal-tbl td.cal-cell{border-radius:7px;text-align:center;font-size:13px;font-weight:700;vertical-align:middle;padding:0}
+.cal-tbl td.cal-cell.empty{background:transparent}
+/* uniform profile fact boxes */
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.facts .fact{display:flex;flex-direction:column;justify-content:center;padding:11px 13px;margin:0}
+.fact .label{font-size:9px;letter-spacing:.4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fact .fval{font-weight:700;font-size:13.5px;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.summary-row{display:flex;align-items:center;justify-content:space-between;padding:11px 2px;border-bottom:1px solid var(--border);font-size:14px}
+.summary-row:last-child{border-bottom:none}
+.sq{width:14px;height:14px;border-radius:4px;display:inline-block;margin-right:11px;vertical-align:-2px}
+
+/* claim / work cards */
+.list-cta{display:flex;align-items:center;gap:13px;cursor:pointer}
+.list-cta .plus{width:38px;height:38px;border-radius:11px;background:var(--present);color:var(--p);display:flex;
+  align-items:center;justify-content:center;font-size:21px;flex:0 0 auto}
+.amt{font-weight:800;font-size:17px}
+.kpi{flex:1;border-radius:12px;padding:11px 13px}
+.tgt-hero{font-size:30px;font-weight:800;margin-top:6px;letter-spacing:-.02em;color:var(--text);line-height:1.1}
+.tgt-hero-sub{font-size:12.5px;color:var(--soft);margin-top:4px}
+.tgt-hero-sub .pos{color:var(--present-tx);font-weight:700}
+.tgt-hero-sub .neg{color:#c44;font-weight:700}
+.tgt-bar{height:9px;border-radius:6px;background:var(--card2);overflow:hidden}
+.tgt-bar-fill{height:100%;background:linear-gradient(90deg,var(--pd),var(--pl));transition:width .4s ease}
+.tgt-stat{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-top:1px solid var(--card2)}
+.tgt-stat:first-child{border-top:none;padding-top:2px}
+.tgt-stat:last-child{padding-bottom:2px}
+.tgt-stat-lbl{color:var(--soft);font-size:13.5px;font-weight:600}
+.tgt-stat-val{font-weight:800;font-size:14.5px;color:var(--text)}
+.tgt-stat-pct{font-weight:600;font-size:12px;color:var(--soft);margin-left:10px}
+.pj-name{font-weight:800;font-size:15px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pj-meta{font-size:11.5px;color:var(--soft);margin-top:3px}
+.pj-stats{display:flex;gap:8px;font-size:12.5px;color:var(--soft);align-items:center;flex-wrap:wrap}
+.pj-stats b{color:var(--text);font-weight:700}
+.pj-sep{opacity:.5}
+.expense-line{display:flex;align-items:center;justify-content:space-between;background:var(--card);border-radius:11px;
+  padding:11px 13px;margin-top:8px}
+.expense-line .dot{width:8px;height:8px;border-radius:50%;background:var(--p);display:inline-block;flex:0 0 auto}
+.chev{display:inline-flex;transition:transform .2s}
+.chev.up{transform:rotate(180deg)}
+
+.added-item{display:flex;align-items:center;justify-content:space-between;background:var(--card2);border-radius:11px;
+  padding:10px 13px;margin-top:8px;font-size:13.5px}
+.added-item .x{color:var(--absent);cursor:pointer;font-weight:700;font-size:16px;padding:0 4px}
+
+.toast{position:absolute;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:#222;color:#fff;
+  padding:13px 20px;border-radius:12px;font-size:13.5px;font-weight:600;opacity:0;pointer-events:none;transition:.3s;z-index:60;
+  max-width:88%;text-align:center;box-shadow:0 10px 24px -8px rgba(0,0,0,.5)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+.empty{text-align:center;color:var(--soft);padding:40px 20px;font-size:14px}
+.locrow{display:flex;align-items:center;gap:13px;margin-top:14px;cursor:pointer}
+.locicon{width:38px;height:38px;border-radius:50%;background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-size:17px;flex:0 0 auto}
+.locrow #locText{color:var(--soft);font-size:14px}
+.locrow #locText.capd{color:var(--present-tx);font-weight:600}
+.facts .fact{box-shadow:0 2px 8px -6px rgba(0,0,0,.25)}
+
+.hidden{display:none!important}
+.btn.redbtn{background:linear-gradient(120deg,#8c3b34,#c0584f)}
+.actionbar{position:sticky;bottom:0;background:linear-gradient(transparent,var(--bg) 28%);padding:16px 0 4px;margin-top:18px}
+.chip.oos{background:#f6dede;color:#b34a42}
+.cbx{width:24px;height:24px;border-radius:7px;border:2px solid var(--p);display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:14px;flex:0 0 auto;cursor:pointer;background:transparent}
+.cbx.on{background:var(--p)}
+.selrow{display:flex;align-items:center;gap:13px;padding:12px 2px;font-size:15px;font-weight:600;cursor:pointer}
+.photo-circle{width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,var(--pd),var(--pl));color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:34px;margin:6px auto 0;cursor:pointer;box-shadow:0 10px 22px -8px rgba(0,0,0,.4)}
+.photo-thumb{display:inline-block;background:var(--present);color:var(--present-tx);font-weight:700;padding:28px 26px;border-radius:14px;font-size:14px}
+.qtybox{display:flex;align-items:center;gap:6px;background:var(--card2);border:1px solid var(--border);border-radius:11px;padding:7px 12px;width:106px;flex:0 0 auto}
+.qtybox input{border:none;background:transparent;width:100%;font-size:14px;font-weight:700;color:var(--text);outline:none}
+.qtybox input::placeholder{color:var(--soft);font-weight:700}
+.qtybox span{font-size:12px;color:var(--soft);font-weight:600}
+.qtybox.dis{opacity:.55}
+.pickfield{width:100%;border:1px solid var(--border);background:#fff;border-radius:12px;padding:14px;font-size:14px;color:var(--text);display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.pickfield .ph{color:#aaa298}
+.chev2{color:var(--soft);font-size:16px}
+.addsite{width:100%;border:2px dashed var(--p);background:transparent;color:var(--p);font-weight:700;font-size:15px;border-radius:12px;padding:16px;cursor:pointer;font-family:var(--fs)}
+.pick-row{display:flex;align-items:center;gap:13px;padding:15px 4px;border-bottom:1px solid var(--border);font-size:15px;cursor:pointer}
+.pick-row:last-child{border-bottom:none}
+.fadein{animation:fade .25s ease both}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="device">
+  <span class="dvol"></span><span class="dpwr"></span><span class="island"></span>
+  <div class="shell" id="shell">
+  <!-- status bar -->
+  <div class="statusbar" id="statusbar">
+    <span>9:41</span>
+    <span class="sb-r"><span>▦</span><span>▲</span><span>▮</span></span>
+  </div>
+
+  <!-- app bar (hidden on login) -->
+  <div class="appbar" id="appbar">
+    <div class="left">
+      <span class="ic" id="navIcon" onclick="appNavIconClick()"></span>
+      <h1 id="appTitle">Dashboard</h1>
+    </div>
+    <span class="ic" onclick="openTheme()" title="Theme">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="8.5" cy="9" r="1.2" fill="#fff" stroke="none"/><circle cx="15.5" cy="9" r="1.2" fill="#fff" stroke="none"/><circle cx="9" cy="15" r="1.2" fill="#fff" stroke="none"/></svg>
+    </span>
+  </div>
+
+  <!-- main view -->
+  <div class="view" id="view"></div>
+
+  <!-- drawer -->
+  <div class="scrim" id="scrim" onclick="closeDrawer();closeSheet()"></div>
+  <div class="drawer" id="drawer">
+    <div class="head">
+      <div class="logo">O</div>
+      <div class="uname" id="drawerName">Jaspal Singh</div>
+      <div class="umail" id="drawerMail">jaspal@onaqt.dev</div>
+    </div>
+    <div class="nav">
+      <div class="dnav" data-screen="dashboard" onclick="go('dashboard')"><span class="di">▦</span><span class="dlabel">Dashboard</span></div>
+      <div class="dnav" data-screen="work" onclick="go('work')"><span class="di">🧰</span><span class="dlabel">Work Management</span></div>
+      <div class="dnav" data-screen="reimb" onclick="go('reimb')"><span class="di">₹</span><span class="dlabel">Reimbursement</span></div>
+      <div class="dnav" onclick="closeDrawer();openTheme()"><span class="di">🎨</span><span class="dlabel">Theme</span></div>
+      <div class="dnav" onclick="logout()"><span class="di">⎋</span><span class="dlabel">Logout</span></div>
+    </div>
+  </div>
+
+  <!-- theme sheet -->
+  <div class="sheet" id="sheet">
+    <div class="grip"></div>
+    <div class="shead">Color Theme</div>
+    <div class="sbody" id="sheetBody"></div>
+  </div>
+
+  <!-- flow sheet (start/end work) -->
+  <div class="sheet" id="flowSheet">
+    <div class="grip"></div>
+    <div class="shead" id="flowTitle"></div>
+    <div class="sbody" id="flowBody"></div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <div class="home-ind"></div>
+  </div>
+</div>
+
+<script>
+/* =====================  SEED DATA  ===================== */
+const USER = { name:'Jaspal Singh', email:'jaspal@onaqt.dev', circle:'CHD',
+  doj:'2026-05-01', manager:'Rajeev Kumar', designation:'IT Engineer' };
+
+const myTargets = {
+  period:'May 2026',
+  lob:'Field Services',
+  project:'jio_4g',
+  level:'L2 Engineer',
+  revenue:{ target:450000, achieved:382000 },
+  sites:{ target:8, done:5 },
+  days:{ active:22, total:25 },
+  hours:{ plan:176, actual:168 },
+  efficiency:87,
+  avgDaysPerSite:1.4
+};
+const myProjects = [
+  { id:'jio_4g',    name:'Jio 4G Expansion',  client:'Jio',           circle:'Chandigarh',
+    sites:{target:5, done:3}, revenue:{target:250000, achieved:220000}, hours:{plan:96, actual:92} },
+  { id:'airtel_5g', name:'Airtel 5G Rollout', client:'Airtel',        circle:'Mohali',
+    sites:{target:2, done:2}, revenue:{target:130000, achieved:142000}, hours:{plan:48, actual:46} },
+  { id:'vi_fiber',  name:'Vi Fiber Upgrade',  client:'Vodafone Idea', circle:'Panchkula',
+    sites:{target:1, done:0}, revenue:{target:70000,  achieved:20000},  hours:{plan:32, actual:30} }
+];
+function _inrAbs(n){ const a=Math.abs(n); if(a>=10000000) return (a/10000000).toFixed(2).replace(/\.?0+$/,'')+'Cr'; if(a>=100000) return (a/100000).toFixed(2).replace(/\.?0+$/,'')+'L'; if(a>=1000) return (a/1000).toFixed(1).replace(/\.0$/,'')+'K'; return ''+a; }
+function inr(n){ return (n<0?'-':'')+'₹'+_inrAbs(n); }
+function inrFull(n){ return (n<0?'-':'')+'₹'+Math.abs(n).toLocaleString('en-IN'); }
+
+const SITES    = ['airtel-4g','JAS002','jio site','jio-3b1','jio-franco','jio-Shahi Majra','jio-sohana'];
+const PURPOSES = ['MRN','MIN','Billing'];
+const PROJECTS = ['jio_4g','airtel_5g','vi_fiber'];
+const CIRCLES  = ['Chandigarh','Mohali','Panchkula'];
+const CLIENTS  = ['Jio','Airtel','Vodafone Idea'];
+const POS      = ['PO-2026-0012','PO-2026-0047','PO-2026-0119'];
+const WTYPES   = ['Installation','Site Survey','Antenna Replace','Maintenance'];
+const LTYPES   = ['Casual Leave','Sick Leave','Earned Leave','Comp Off'];
+const TMODES   = ['Cab / Taxi','Auto Rickshaw','Own Vehicle','Bike','Bus','Train','Flight','Metro'];
+
+let claims = [
+  { id:'CLM-20260514-7045BDDC', status:'Approved by PM', date:'2026-05-14', type:'Local',
+    purpose:'Billing', remarks:'Site visit conveyance',
+    sitesData:[{ site:'jio-3b1', items:[{cat:'Travel',label:'Travel · Cab',amt:500},{cat:'Travel',label:'Travel · Auto',amt:100},{cat:'DA',label:'Daily Allowance',amt:150}] }],
+    approved:750 },
+  { id:'CLM-20260514-D70CB261', status:'Submitted', date:'2026-05-14', type:'Local',
+    purpose:'MRN', remarks:'',
+    sitesData:[{ site:'airtel_site', items:[{cat:'Travel',label:'Travel · Bike',amt:400},{cat:'DA',label:'Daily Allowance',amt:300}] }],
+    approved:null },
+  { id:'CLM-20260501-3F1F1AF0', status:'Approved by ADMIN', date:'2026-05-01', type:'Local',
+    purpose:'Billing', remarks:'Survey expenses',
+    sitesData:[{ site:'jio_site', items:[{cat:'Travel',label:'Travel · Bus',amt:200},{cat:'DA',label:'Daily Allowance',amt:100},{cat:'Others',label:'Stationery',amt:50}] }],
+    approved:350 }
+];
+
+let works = [
+  { id:'airtel-4g', site:'airtel_site', project:'jio_4g', circle:'Chandigarh', stg:'pending',   types:['Installation'],               date:'2026-05-29' },
+  { id:'JAS002',    site:'JAS002',      project:'jio_4g', circle:'Chandigarh', stg:'completed', types:['Antenna Replace'],            date:'2026-05-20' },
+  { id:'jio-3b1',   site:'jio-3b1',     project:'jio_4g', circle:'Mohali',     stg:'pending',   types:['Installation','Site Survey'], date:'2026-05-28' },
+  { id:'jio site',  site:'jio_site',    project:'jio_4g', circle:'Chandigarh', stg:'pending',   types:['Installation','Site Survey'], date:'2026-05-27' },
+  { id:'jio-sohana',site:'jio-sohana',  project:'jio_4g', circle:'Mohali',     stg:'completed', types:['Installation'],               date:'2026-05-15' }
+];
+const MATERIALS = [
+  { name:'Abc testing wire 10 m', avail:20, unit:'m' },
+  { name:'Earthing Wire 25mm²',   avail:0,  unit:'m' },
+  { name:'GI Tower Bolt Set M20', avail:0,  unit:'box' },
+  { name:'Iphone Covers wire 34', avail:25, unit:'box' },
+  { name:'OPC Cement 50kg Bag',   avail:0,  unit:'box' },
+  { name:'Optical Fiber',         avail:0,  unit:'m' },
+  { name:'Testing onaqt sync 3',  avail:50, unit:'cm' }
+];
+let flowCtx = { idx:0, status:null, photo:false };
+let selectedTypes = new Set();
+let matQty = {};
+let matSearch = '';
+let pendingSites = [];
+let expandedSites = new Set();
+
+/* Attendance status for May 2026 — matches reference.
+   p=present  s=submitted  i=idle  g=absent (system generated) */
+let attendance = {1:'p',2:'g',3:'g',4:'g',5:'s',6:'g',7:'g',8:'g',9:'g',10:'g',11:'g',12:'g',13:'g',
+  14:'s',15:'g',16:'g',17:'g',18:'g',19:'s',20:'g',21:'p',22:'g',23:'g',24:'g',25:'s',26:'s',
+  27:'g',28:'i',29:'g',30:'g',31:'g'};
+
+/* =====================  THEMES  ===================== */
+const THEMES = {
+  forest:{ name:'Forest Green', p:'#2d5a3d', pd:'#1f3d2a', pl:'#4f9266', bgL:'#ece8e0', cardL:'#fdfbf7' },
+  ocean: { name:'Ocean Blue',  p:'#1E4A72', pd:'#163858', pl:'#3a78ad', bgL:'#e7edf2', cardL:'#fbfdfe' },
+  rose:  { name:'Dusty Rose',  p:'#8B3A52', pd:'#6e2d40', pl:'#b05c74', bgL:'#efe7e8', cardL:'#fefbfb' },
+  indigo:{ name:'Slate Indigo',p:'#3B3F8C', pd:'#2e3270', pl:'#5a5fb0', bgL:'#e9e9f0', cardL:'#fbfbfe' },
+  amber: { name:'Warm Amber',  p:'#7A4F1A', pd:'#5e3c12', pl:'#a87b3a', bgL:'#efe9df', cardL:'#fefcf8' },
+  slate: { name:'Cool Slate',  p:'#2C4A5A', pd:'#1e3340', pl:'#4a6a7c', bgL:'#e7ecef', cardL:'#fbfdfe' }
+};
+let state = { theme:'forest', mode:'light', dayStarted:false, calMonth:4 /*May, 0-idx*/, calYear:2026, locCaptured:false };
+
+function applyTheme(){
+  const t = THEMES[state.theme]; const r = document.documentElement.style;
+  r.setProperty('--p', t.p); r.setProperty('--pd', t.pd); r.setProperty('--pl', t.pl);
+  if(state.mode==='dark'){
+    r.setProperty('--bg','#14171a'); r.setProperty('--card','#1f242a'); r.setProperty('--card2','#272d34');
+    r.setProperty('--text','#eef2f4'); r.setProperty('--soft','#9aa3aa'); r.setProperty('--border','#2e353c');
+    r.setProperty('--neutral','#2b3138'); r.setProperty('--neutral-tx','#7d8790');
+  } else {
+    r.setProperty('--bg', t.bgL); r.setProperty('--card', t.cardL); r.setProperty('--card2','#f1ece2');
+    r.setProperty('--text','#2a2a26'); r.setProperty('--soft','#7a746a'); r.setProperty('--border','#e3ddd0');
+    r.setProperty('--neutral','#e2ddd2'); r.setProperty('--neutral-tx','#9a9183');
+  }
+}
+
+/* =====================  ROUTER  ===================== */
+let current = 'login';
+let appbarVisible = false;
+
+const TITLES = { dashboard:'Dashboard', work:'Work Management', reimb:'Reimbursement',
+  selfassign:'Self Assigned Work', workdetail:'Details', createclaim:'Create Claim',
+  claimdetail:'Claim Details', leave:'Apply Leave', material:'Material Usage', addtravel:'Add Travel Entry' };
+// screens that show a back-arrow instead of hamburger
+const BACKSCREENS = ['selfassign','workdetail','createclaim','claimdetail','leave','material','addtravel'];
+let backTarget = 'dashboard';
+
+function go(screen, opt){
+  closeDrawer();
+  current = screen;
+  const ab = document.getElementById('appbar');
+  const sb = document.getElementById('statusbar');
+  if(screen==='login'){ ab.classList.add('hidden'); sb.classList.add('light'); }
+  else { ab.classList.remove('hidden'); sb.classList.remove('light'); }
+  // appbar config
+  if(screen!=='login'){
+    document.getElementById('appTitle').textContent = TITLES[screen]||'ONAQT';
+    const ni = document.getElementById('navIcon');
+    if(BACKSCREENS.includes(screen)) ni.innerHTML = '<span class="back">‹</span>';
+    else ni.innerHTML = '<svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>';
+  }
+  // active drawer item
+  document.querySelectorAll('.dnav').forEach(d=>d.classList.toggle('active', d.dataset.screen===screen));
+  render(screen, opt);
+  document.getElementById('view').scrollTop = 0;
+}
+function appNavIconClick(){
+  if(current==='material'){ go('workdetail',flowCtx.idx); return; }
+  BACKSCREENS.includes(current) ? go(backTarget) : openDrawer();
+}
+
+function openDrawer(){ document.getElementById('drawer').classList.add('open'); document.getElementById('scrim').classList.add('show'); }
+function closeDrawer(){ document.getElementById('drawer').classList.remove('open'); if(!document.getElementById('sheet').classList.contains('open')) document.getElementById('scrim').classList.remove('show'); }
+function openTheme(){ renderSheet(); document.getElementById('sheet').classList.add('open'); document.getElementById('scrim').classList.add('show'); }
+function closeSheet(){ document.getElementById('sheet').classList.remove('open'); document.getElementById('flowSheet').classList.remove('open'); if(!document.getElementById('drawer').classList.contains('open')) document.getElementById('scrim').classList.remove('show'); }
+
+function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),2200); }
+
+function logout(){ closeDrawer(); state.dayStarted=false; go('login'); }
+
+/* =====================  RENDER  ===================== */
+function render(screen, opt){
+  const v = document.getElementById('view');
+  let html='';
+  if(screen==='login')        html=tplLogin();
+  else if(screen==='dashboard') html=tplDashboard();
+  else if(screen==='work')      html=tplWork();
+  else if(screen==='selfassign')html=tplSelfAssign();
+  else if(screen==='workdetail')html=tplWorkDetail(opt);
+  else if(screen==='reimb')     html=tplReimb();
+  else if(screen==='createclaim')html=tplCreateClaim();
+  else if(screen==='claimdetail')html=tplClaimDetail(opt);
+  else if(screen==='leave')     html=tplLeave();
+  else if(screen==='material')  html=tplMaterial();
+  else if(screen==='addtravel') html=tplAddTravel();
+  v.innerHTML = '<div class="pad fadein">'+html+'</div>';
+  if(screen==='dashboard'){ bindSlider(); renderCalendar(); bindTabSwipe(); requestAnimationFrame(()=>updateTabUI(false)); }
+  if(screen==='material'){ updateMatFooter(); }
+  if(screen==='createclaim'){ renderDraftLists(); }
+}
+
+/* ---------- LOGIN ---------- */
+function tplLogin(){
+  return `
+  <div style="text-align:center;margin-top:26px">
+    <div style="width:70px;height:70px;margin:0 auto;border-radius:20px;background:linear-gradient(135deg,var(--pd),var(--pl));
+      display:flex;align-items:center;justify-content:center;color:#fff;font-size:34px;font-weight:800;box-shadow:0 14px 26px -10px rgba(0,0,0,.5)">O</div>
+    <div style="font-size:23px;font-weight:800;margin-top:14px">ONAQT</div>
+    <div style="font-size:12.5px;color:var(--soft);margin-top:3px">Work Force Management System</div>
+  </div>
+  <div class="card mt20" style="padding:22px 18px">
+    <div style="font-size:21px;font-weight:800">Welcome back</div>
+    <div style="font-size:13px;color:var(--soft);margin-top:3px">Login to continue</div>
+    <div class="fgroup mt16"><input class="field" id="liUser" placeholder="Enter Username" value="jaspal"></div>
+    <div class="fgroup" style="margin-top:12px;position:relative">
+      <input class="field" id="liPass" type="password" placeholder="Enter Password" value="demo1234" style="padding-right:46px">
+      <span onclick="togglePass()" style="position:absolute;right:14px;top:13px;cursor:pointer;font-size:18px;color:var(--soft)">👁</span>
+    </div>
+    <div style="text-align:right;font-size:12px;color:var(--p);font-weight:700;margin-top:9px;cursor:pointer" onclick="toast('Password reset link sent (demo)')">Forgot your password?</div>
+    <button class="btn mt16" onclick="doLogin()">Login</button>
+    <button class="btn ghost mt12" onclick="toast('OTP sent to registered mobile (demo)')">Login with OTP</button>
+  </div>`;
+}
+function togglePass(){ const p=document.getElementById('liPass'); p.type = p.type==='password'?'text':'password'; }
+function doLogin(){
+  document.getElementById('drawerName').textContent = USER.name;
+  document.getElementById('drawerMail').textContent = USER.email;
+  go('dashboard'); toast('Welcome back, '+USER.name.split(' ')[0]);
+}
+
+/* ---------- DASHBOARD ---------- */
+let activeTab='attendance';
+let tabIdx=0;
+function tplDashboard(){
+  return `
+  <div class="between">
+    <div style="font-size:21px;font-weight:800">${USER.name}</div>
+    <span class="chip ok" style="cursor:pointer" onclick="openLeave()">Apply Leave</span>
+  </div>
+  <div class="locrow" onclick="captureLoc()">
+    <span class="locicon">📍</span>
+    <span id="locText" class="${state.locCaptured?'capd':''}">${state.locCaptured?'Location captured · 30.7335, 76.7794':'Get my current latitude and longitude'}</span>
+  </div>
+
+  <div id="slideWrap" class="mt16"></div>
+
+  <div class="facts mt12">
+    <div class="card fact"><div class="label">Circle</div><div class="fval">${USER.circle}</div></div>
+    <div class="card fact"><div class="label">Date of Joining</div><div class="fval">${fmt(USER.doj)}</div></div>
+    <div class="card fact"><div class="label">Reporting Manager</div><div class="fval">${USER.manager}</div></div>
+    <div class="card fact"><div class="label">Designation</div><div class="fval">${USER.designation}</div></div>
+  </div>
+
+  <div class="tabs">
+    <button onclick="setTabIdx(0)">Attendance</button>
+    <button onclick="setTabIdx(1)">My Targets</button>
+    <button onclick="setTabIdx(2)">Projects</button>
+    <div class="tab-ind" id="tabInd"></div>
+  </div>
+  <div class="tab-viewport" id="tabViewport">
+    <div class="tab-track" id="tabTrack">
+      <div class="tab-pane">${tplPaneAttendance()}</div>
+      <div class="tab-pane">${tplPaneTargets()}</div>
+      <div class="tab-pane">${tplPaneProjects()}</div>
+    </div>
+  </div>`;
+}
+function tplPaneAttendance(){
+  return `<div class="card"><div id="calBox"></div></div>${tplSummary()}`;
+}
+function tplPaneTargets(){
+  const t=myTargets;
+  const revPct  = Math.round(t.revenue.achieved/t.revenue.target*100);
+  const sitePct = Math.round(t.sites.done/t.sites.target*100);
+  const dayPct  = Math.round(t.days.active/t.days.total*100);
+  const hrsPct  = Math.round(t.hours.actual/t.hours.plan*100);
+  const revVar  = t.revenue.achieved - t.revenue.target;
+  const status     = revPct>=100?'Above Target':revPct>=80?'On Track':'Under Target';
+  const statusCls  = revPct>=80?'ok':'warn';
+  const stat=(lbl,val,pct)=>`
+    <div class="tgt-stat">
+      <span class="tgt-stat-lbl">${lbl}</span>
+      <span><span class="tgt-stat-val">${val}</span>${pct!=null?`<span class="tgt-stat-pct">${pct}%</span>`:''}</span>
+    </div>`;
+  return `
+  <div class="card">
+    <div class="between">
+      <div>
+        <div class="label">PERIOD</div>
+        <div style="font-weight:800;font-size:16px;margin-top:2px">${t.period}</div>
+      </div>
+      <span class="chip ${statusCls}">${status}</span>
+    </div>
+  </div>
+
+  <div class="card mt12">
+    <div class="label">Revenue Target</div>
+    <div class="tgt-hero">${inr(t.revenue.achieved)}</div>
+    <div class="tgt-hero-sub">of ${inr(t.revenue.target)} target · <span class="${revVar>=0?'pos':'neg'}">${revVar>=0?'+':''}${inr(revVar)}</span></div>
+    <div class="tgt-bar mt12"><div class="tgt-bar-fill" style="width:${Math.min(100,revPct)}%"></div></div>
+    <div class="between mt8" style="font-size:12px;color:var(--soft)">
+      <span>${revPct}% achieved</span>
+      <span>${Math.max(0,100-revPct)}% to go</span>
+    </div>
+  </div>
+
+  <div class="card mt12">
+    ${stat('Sites Completed', `${t.sites.done} / ${t.sites.target}`, sitePct)}
+    ${stat('Active Days',     `${t.days.active} / ${t.days.total}`,  dayPct)}
+    ${stat('Hours Worked',    `${t.hours.actual} / ${t.hours.plan}`, hrsPct)}
+    ${stat('Efficiency',      `${t.efficiency}%`,                    null)}
+  </div>`;
+}
+function tplPaneProjects(){
+  return myProjects.map((p,i)=>{
+    const revPct = Math.round(p.revenue.achieved/p.revenue.target*100);
+    const status    = revPct>=100?'Above Target':revPct>=80?'On Track':'Under Target';
+    const statusCls = revPct>=80?'ok':'warn';
+    return `
+    <div class="card${i>0?' mt12':''}">
+      <div class="between">
+        <div style="min-width:0;flex:1">
+          <div class="pj-name">${p.name}</div>
+          <div class="pj-meta">${p.client} · ${p.circle}</div>
+        </div>
+        <span class="chip ${statusCls}">${status}</span>
+      </div>
+      <div class="tgt-bar mt12"><div class="tgt-bar-fill" style="width:${Math.min(100,revPct)}%"></div></div>
+      <div class="pj-stats mt8">
+        <span><b>${p.sites.done}/${p.sites.target}</b> sites</span>
+        <span class="pj-sep">·</span>
+        <span><b>${inr(p.revenue.achieved)}</b> of ${inr(p.revenue.target)}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function setTabIdx(i){
+  if(i<0) i=0; if(i>2) i=2;
+  tabIdx=i; activeTab=['attendance','targets','projects'][i];
+  updateTabUI(true);
+}
+function updateTabUI(animate){
+  const btns=document.querySelectorAll('.tabs button');
+  const ind=document.getElementById('tabInd');
+  const track=document.getElementById('tabTrack');
+  btns.forEach((b,i)=>b.classList.toggle('on', i===tabIdx));
+  if(ind && btns[tabIdx]){
+    if(!animate){ ind.style.transition='none'; }
+    ind.style.width = btns[tabIdx].offsetWidth + 'px';
+    ind.style.transform = `translateX(${btns[tabIdx].offsetLeft}px)`;
+    if(!animate){ void ind.offsetWidth; ind.style.transition=''; }
+  }
+  if(track){
+    if(!animate){ track.style.transition='none'; }
+    track.style.transform = `translateX(-${tabIdx*100}%)`;
+    if(!animate){ void track.offsetWidth; track.style.transition=''; }
+  }
+}
+
+let _tabDrag=null;
+function bindTabSwipe(){
+  const vp=document.getElementById('tabViewport'); if(!vp) return;
+  vp.addEventListener('pointerdown', tabPtrDown);
+  vp.addEventListener('pointermove', tabPtrMove);
+  vp.addEventListener('pointerup', tabPtrUp);
+  vp.addEventListener('pointercancel', tabPtrUp);
+}
+function tabPtrDown(e){
+  if(e.pointerType==='mouse' && e.button!==0) return;
+  _tabDrag={ x:e.clientX, y:e.clientY, dir:null, dx:0, id:e.pointerId };
+}
+function tabPtrMove(e){
+  if(!_tabDrag || e.pointerId!==_tabDrag.id) return;
+  _tabDrag.dx = e.clientX - _tabDrag.x;
+  const dy = e.clientY - _tabDrag.y;
+  if(!_tabDrag.dir){
+    if(Math.abs(_tabDrag.dx) > 10 || Math.abs(dy) > 10){
+      _tabDrag.dir = Math.abs(_tabDrag.dx) > Math.abs(dy) ? 'h' : 'v';
+      if(_tabDrag.dir==='h'){
+        const track=document.getElementById('tabTrack');
+        if(track) track.style.transition='none';
+        try{ e.currentTarget.setPointerCapture(e.pointerId); }catch(_){}
+      }
+    }
+  }
+  if(_tabDrag.dir==='h'){
+    e.preventDefault();
+    const vp=document.getElementById('tabViewport'); if(!vp) return;
+    const w=vp.offsetWidth;
+    let pct = -tabIdx*100 + (_tabDrag.dx/w)*100;
+    if(pct > 0) pct = pct*0.3;
+    const min = -2*100;
+    if(pct < min) pct = min + (pct-min)*0.3;
+    const track=document.getElementById('tabTrack');
+    if(track) track.style.transform=`translateX(${pct}%)`;
+  }
+}
+function tabPtrUp(e){
+  if(!_tabDrag) return;
+  const wasH = _tabDrag.dir==='h';
+  const dx = _tabDrag.dx;
+  _tabDrag=null;
+  const track=document.getElementById('tabTrack');
+  if(track) track.style.transition='';
+  if(!wasH){ updateTabUI(true); return; }
+  const vp=document.getElementById('tabViewport'); if(!vp){ updateTabUI(true); return; }
+  const w=vp.offsetWidth;
+  let newIdx=tabIdx;
+  if(dx < -w*0.2) newIdx=Math.min(2, tabIdx+1);
+  else if(dx > w*0.2) newIdx=Math.max(0, tabIdx-1);
+  setTabIdx(newIdx);
+}
+function tplSummary(){
+  const c=countAtt();
+  const row=(color,label,val)=>`<div class="summary-row"><span><i class="sq" style="background:${color}"></i>${label}</span><b>${val}</b></div>`;
+  return `<div class="card mt12">
+    <div style="text-align:center;font-weight:800;font-size:18px;margin-bottom:6px">Summary</div>
+    <div class="summary-row"><span style="font-weight:700">Total Days of Month</span><b>31</b></div>
+    ${row('#d7efdc','Present',c.p||0)}
+    ${row('#e02d2d','Absent',0)}
+    ${row('#f4a7a0','Absent (System Generated)',c.g||0)}
+    ${row('#f5a623','Incomplete',0)}
+    ${row('#bcd9f2','Leave',0)}
+    ${row('#f4d9ef','Idle',c.i||0)}
+    ${row('#d8d4f0','Work Off',0)}
+    ${row('#f5e6a0','Holidays',0)}
+    ${row('#1f3a55','Submitted',c.s||0)}
+    ${row('#e8e3d8','Unmarked Days',0)}
+  </div>`;
+}
+function countAtt(){ const c={p:0,s:0,i:0,g:0,u:0}; for(const k in attendance){ c[attendance[k]]=(c[attendance[k]]||0)+1; } return c; }
+
+function renderCalendar(){
+  const box=document.getElementById('calBox'); if(!box) return;
+  const monthNames=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const first=new Date(state.calYear,state.calMonth,1).getDay();
+  const days=new Date(state.calYear,state.calMonth+1,0).getDate();
+  const colors={
+    p:['#d7efdc','#2f6b3f'],   // Present
+    s:['#1f3a55','#ffffff'],   // Submitted
+    i:['#f4d9ef','#9a3d86'],   // Idle
+    g:['#f4a7a0','#9c3b34'],   // Absent (system generated)
+    u:['#e8e3d8','#9a9183']    // Unmarked
+  };
+  const total = first + days;
+  const rows = Math.ceil(total/7);
+  let body='';
+  for(let r=0;r<rows;r++){
+    body+='<tr>';
+    for(let c=0;c<7;c++){
+      const slot = r*7 + c;
+      if(slot < first || slot >= first+days){
+        body+='<td class="cal-cell empty"></td>';
+      } else {
+        const d = slot - first + 1;
+        const st = (state.calMonth===4&&state.calYear===2026)?(attendance[d]||'u'):'u';
+        const [bg,tx]=colors[st]||colors.u;
+        body+=`<td class="cal-cell" style="background:${bg};color:${tx}">${String(d).padStart(2,'0')}</td>`;
+      }
+    }
+    body+='</tr>';
+  }
+  box.innerHTML=`
+    <div class="cal-head">
+      <button class="cal-nav" onclick="calMove(-1)">‹</button>
+      <div class="cal-title">${monthNames[state.calMonth]} ${state.calYear}</div>
+      <button class="cal-nav" onclick="calMove(1)">›</button>
+    </div>
+    <table class="cal-tbl">
+      <thead><tr><th>S</th><th>M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th></tr></thead>
+      <tbody>${body}</tbody>
+    </table>`;
+  scheduleSquare();
+}
+function sizeCalCells(){
+  const tbl=document.querySelector('.cal-tbl'); if(!tbl) return;
+  const cs=tbl.querySelectorAll('tbody td.cal-cell');
+  if(!cs.length) return;
+  const w=cs[0].getBoundingClientRect().width;
+  if(w>2){ cs.forEach(c=>{ c.style.height=w+'px'; }); }
+}
+function scheduleSquare(){
+  requestAnimationFrame(()=>{ sizeCalCells(); requestAnimationFrame(sizeCalCells); });
+  setTimeout(sizeCalCells,80);
+}
+window.addEventListener('resize', sizeCalCells);
+function calMove(dir){ state.calMonth+=dir; if(state.calMonth<0){state.calMonth=11;state.calYear--;} if(state.calMonth>11){state.calMonth=0;state.calYear++;} renderCalendar(); }
+
+function captureLoc(){ state.locCaptured=true; const el=document.getElementById('locText'); if(el){ el.classList.add('capd'); el.textContent='Location captured · 30.7335, 76.7794'; } toast('Location captured'); }
+
+/* slide-to-start (pointer drag) */
+function tplSlider(){
+  const done=state.dayStarted;
+  return `<div class="slider ${done?'done':''}" id="slider">
+    <span class="knob" id="knob">${done?'■':'→'}</span>
+    <span id="sliderLabel">${done?'Slide to End Day':'Slide to Start Day'}</span>
+  </div>`;
+}
+function bindSlider(){
+  const wrap=document.getElementById('slideWrap'); if(!wrap) return;
+  wrap.innerHTML=tplSlider();
+  const slider=document.getElementById('slider'), knob=document.getElementById('knob');
+  let dragging=false,startX=0,max=0;
+  const onDown=e=>{ dragging=true; knob.style.transition='none'; startX=(e.touches?e.touches[0].clientX:e.clientX); max=slider.clientWidth-knob.clientWidth-12; e.preventDefault(); };
+  const onMove=e=>{ if(!dragging) return; let x=(e.touches?e.touches[0].clientX:e.clientX)-startX; x=Math.max(0,Math.min(max,x)); knob.style.left=(6+x)+'px'; };
+  const onUp=e=>{ if(!dragging) return; dragging=false; knob.style.transition='left .2s';
+    const left=parseFloat(knob.style.left)||6;
+    if(left>max*0.7){ // success
+      state.dayStarted=!state.dayStarted;
+     
+      toast(state.dayStarted?'Day started · '+new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}):'Day ended');
+      bindSlider();
+    } else { knob.style.left='6px'; }
+  };
+  knob.addEventListener('mousedown',onDown); window.addEventListener('mousemove',onMove); window.addEventListener('mouseup',onUp);
+  knob.addEventListener('touchstart',onDown,{passive:false}); window.addEventListener('touchmove',onMove,{passive:false}); window.addEventListener('touchend',onUp);
+}
+
+/* ---------- WORK MANAGEMENT ---------- */
+function tplWork(){
+  return `
+  <div class="card list-cta" onclick="go('selfassign')">
+    <span class="plus">+</span>
+    <div class="grow"><div style="font-weight:800;font-size:14px;color:var(--p)">SELF WORK ASSIGN</div>
+      <div class="muted" style="font-size:12.5px">Create New Work Assignment</div></div>
+    <span class="muted" style="font-size:20px">›</span>
+  </div>
+  <div class="sectlabel">Assigned Work</div>
+  ${works.map((w,i)=>`
+    <div class="card" style="padding:15px;cursor:pointer" onclick="go('workdetail',${i})">
+      <div class="between"><span style="font-weight:800;font-size:16px">${w.id}</span>
+        <span class="chip ${stgChip(w.stg)}">${stgLabel(w.stg)}</span></div>
+      <div class="mt10" style="font-size:13.5px"><span class="muted">Site ID:</span> <b>${w.site}</b></div>
+      <div class="mt6" style="font-size:13.5px"><span class="muted">Project:</span> <b>${w.project}</b></div>
+      <div class="mt10" style="display:flex;gap:7px;flex-wrap:wrap;align-items:center">
+        <span class="muted" style="font-size:13px">Types:</span>
+        ${w.types.map(t=>`<span class="chip neutral">${t}</span>`).join('')}
+      </div>
+    </div>`).join('')}`;
+}
+function tplWorkDetail(i){
+  backTarget='work'; flowCtx.idx=i; const w=works[i];
+  if(w.stg==='inprogress' && selectedTypes._for!==i){ selectedTypes=new Set(); selectedTypes._for=i; }
+  const badge = `<span class="chip ${stgChip(w.stg)}">${stgLabel(w.stg)}</span>`;
+  const inprog = w.stg==='inprogress';
+  let typesHtml;
+  if(inprog){
+    const allOn = selectedTypes.size===w.types.length;
+    typesHtml = `
+      <label class="selrow" onclick="toggleAllTypes(${i})"><span class="cbx ${allOn?'on':''}">${allOn?'✓':''}</span> Select All</label>
+      ${w.types.map((t,ti)=>`
+        <div class="card" style="padding:14px;display:flex;align-items:center;gap:13px">
+          <span class="cbx ${selectedTypes.has(ti)?'on':''}" onclick="toggleType(${i},${ti})">${selectedTypes.has(ti)?'✓':''}</span>
+          <div class="grow"><div style="font-weight:700">${t}</div><div class="muted" style="font-size:12.5px;margin-top:3px">${fmt(w.date)}</div></div>
+          <span class="chip warn">Pending</span>
+        </div>`).join('')}`;
+  } else {
+    const tBadge = w.stg==='completed'?'<span class="chip ok">Completed</span>'
+                 : w.stg==='accepted'?'<span class="chip info">Accepted</span>'
+                 : '<span class="chip warn">Pending</span>';
+    typesHtml = w.types.map(t=>`<div class="card between" style="padding:15px">
+      <div><div style="font-weight:700">${t}</div><div class="muted" style="font-size:12.5px;margin-top:3px">${fmt(w.date)}</div></div>
+      ${tBadge}</div>`).join('');
+  }
+  let action;
+  if(w.stg==='pending')        action=`<button class="btn" onclick="acceptWork(${i})">Accept</button>`;
+  else if(w.stg==='accepted')  action=`<button class="btn" onclick="openStartWork(${i})">Start Work</button>`;
+  else if(w.stg==='inprogress')action=`<button class="btn redbtn" onclick="openEndWork(${i})">End Work</button>`;
+  else                         action=`<button class="btn" disabled style="opacity:.5">Completed</button>`;
+  return `
+  <div style="font-size:24px;font-weight:800">${w.id}</div>
+  <div class="muted" style="font-size:14px">${w.site}</div>
+  <div class="card mt16">
+    <div class="between"><span style="font-weight:800;color:var(--p);font-size:15px">Site Information</span>${badge}</div>
+    <div class="row mt12">
+      <div class="kpi" style="background:var(--card2)"><div class="label">Project</div><div style="font-weight:700;margin-top:3px">${w.project}</div></div>
+      <div class="kpi" style="background:var(--card2)"><div class="label">Circle</div><div style="font-weight:700;margin-top:3px">${w.circle}</div></div>
+    </div>
+  </div>
+  <div class="sectlabel">Work Types</div>
+  ${typesHtml}
+  <div class="actionbar">${action}</div>`;
+}
+function acceptWork(i){ works[i].stg='accepted'; toast('Work accepted'); go('workdetail',i); }
+function toggleType(i,ti){ selectedTypes._for=i; selectedTypes.has(ti)?selectedTypes.delete(ti):selectedTypes.add(ti); go('workdetail',i); }
+function toggleAllTypes(i){ const w=works[i];
+  if(selectedTypes.size===w.types.length) selectedTypes=new Set(); else selectedTypes=new Set(w.types.map((_,k)=>k));
+  selectedTypes._for=i; go('workdetail',i); }
+
+/* ---- Stage 2: Start Work (photo + location) ---- */
+function openStartWork(i){ flowCtx.idx=i; flowCtx.photo=false; openFlowSheet('Start Work', startWorkBody()); }
+function startWorkBody(){
+  const photoBlock = flowCtx.photo
+    ? `<div style="text-align:center"><div class="photo-thumb">✓&nbsp; Photo captured</div></div>
+       <div class="card mt16" style="background:var(--card2);display:flex;gap:11px;align-items:flex-start">
+         <span style="color:var(--p);font-size:18px">📍</span>
+         <div><div class="label">Location</div><div style="font-weight:700;margin-top:3px">30.753485, 76.7418167</div></div></div>`
+    : `<div style="text-align:center;padding:6px 0 2px">
+         <div class="photo-circle" onclick="capturePhoto()">📷</div>
+         <div class="muted mt12" style="font-size:13px">Tap to take photo</div></div>`;
+  return `${photoBlock}
+    <div class="row mt20"><button class="btn danger grow" onclick="closeSheet()">Cancel</button>
+      <button class="btn grow" onclick="confirmStartWork()">Start Work</button></div>`;
+}
+function capturePhoto(){ flowCtx.photo=true; document.getElementById('flowBody').innerHTML=startWorkBody(); }
+function confirmStartWork(){
+  if(!flowCtx.photo){ toast('Please take a photo first'); return; }
+  works[flowCtx.idx].stg='inprogress'; selectedTypes=new Set(); selectedTypes._for=null;
+  closeSheet(); go('workdetail',flowCtx.idx); toast('Work started');
+}
+
+/* ---- Stage 3: End Work (status + remarks) ---- */
+function openEndWork(i){ flowCtx.idx=i;
+  if(selectedTypes.size===0){ toast('Select at least one work type'); return; }
+  flowCtx.status=null; openFlowSheet('End Work', endWorkBody());
+}
+function endWorkBody(){
+  const opt=(v)=>`<label class="selrow" onclick="setEndStatus('${v}')"><span class="cbx ${flowCtx.status===v?'on':''}">${flowCtx.status===v?'✓':''}</span> ${v}</label>`;
+  return `<div class="card" style="background:var(--card2);display:flex;gap:11px;align-items:flex-start">
+      <span style="color:var(--p);font-size:18px">📍</span>
+      <div><div class="label">Work Location</div><div style="font-weight:700;margin-top:3px">30.753485, 76.7418167</div></div></div>
+    <textarea class="field mt12" placeholder="Enter Remarks"></textarea>
+    <div class="label mt16" style="margin-bottom:4px">Select Status</div>
+    ${opt('COMPLETED')}${opt('PENDING')}
+    <div class="row mt20"><button class="btn danger grow" onclick="closeSheet()">Cancel</button>
+      <button class="btn grow" onclick="submitEndWork()">Submit</button></div>`;
+}
+function setEndStatus(v){ flowCtx.status=v; document.getElementById('flowBody').innerHTML=endWorkBody(); }
+function submitEndWork(){ if(!flowCtx.status){ toast('Please select a status'); return; } closeSheet(); matQty={}; matSearch=''; go('material'); }
+
+/* ---- Stage 4: Material Usage ---- */
+function tplMaterial(){
+  backTarget='workdetail';
+  const list = MATERIALS.map((m,i)=>{
+    const out = m.avail===0;
+    const sub = out?'<span class="chip oos">Out of stock</span>'
+                   :`<span class="muted" style="font-size:12.5px">Available: ${m.avail} ${m.unit}</span>`;
+    return `<div class="card" style="padding:14px;display:flex;align-items:center;gap:12px" data-name="${(m.name+' '+m.unit).toLowerCase()}">
+      <div class="grow"><div style="font-weight:700">${m.name}</div><div class="mt6">${sub}</div></div>
+      <div class="qtybox ${out?'dis':''}">
+        <input ${out?'disabled':''} value="${matQty[i]||''}" inputmode="decimal" placeholder="Qty" oninput="setMatQty(${i},this.value)">
+        <span>${m.unit}</span></div>
+    </div>`;
+  }).join('');
+  return `
+  <input class="field" placeholder="🔍  Search by name or unit" value="${matSearch}" oninput="filterMat(this.value)">
+  <div class="muted mt12" style="font-size:12.5px">${MATERIALS.length} materials</div>
+  <div id="matList" class="mt8">${list}</div>
+  <div class="actionbar">
+    <div class="between" style="font-size:13px;margin-bottom:10px"><span><b id="matCount">0</b> materials added</span><span class="muted">Total: <b id="matTotal">0</b></span></div>
+    <button class="btn" id="matSubmit" onclick="submitMaterial()">Submit without materials</button>
+  </div>`;
+}
+function setMatQty(i,v){ v=v.replace(/[^0-9.]/g,''); if(v==='') delete matQty[i]; else matQty[i]=v; updateMatFooter(); }
+function updateMatFooter(){
+  const keys=Object.keys(matQty).filter(k=>parseFloat(matQty[k])>0);
+  const count=keys.length, total=keys.reduce((a,k)=>a+parseFloat(matQty[k]||0),0);
+  const c=document.getElementById('matCount'), t=document.getElementById('matTotal'), b=document.getElementById('matSubmit');
+  if(c) c.textContent=count; if(t) t.textContent=Number(total)%1?total.toFixed(2):total;
+  if(b) b.textContent = count>0?`Submit (${count} material${count>1?'s':''})`:'Submit without materials';
+}
+function filterMat(v){ matSearch=v; const ql=v.toLowerCase();
+  document.querySelectorAll('#matList .card').forEach(c=>{ c.style.display=c.dataset.name.includes(ql)?'':'none'; }); }
+function submitMaterial(){
+  works[flowCtx.idx].stg='completed';
+  toast('Work completed');
+  go('work');
+}
+
+function tplSelfAssign(){
+  backTarget='work';
+  const opt=(arr)=>arr.map(x=>`<option>${x}</option>`).join('');
+  return `
+  <div class="fgroup"><div class="flabel">Client</div><select class="field"><option value="" selected disabled>Select Client</option>${opt(CLIENTS)}</select></div>
+  <div class="fgroup"><div class="flabel">Project</div><select class="field"><option value="" selected disabled>Select Project</option>${opt(PROJECTS)}</select></div>
+  <div class="fgroup"><div class="flabel">PO Number</div><select class="field"><option value="" selected disabled>Select PO Number</option>${opt(POS)}</select></div>
+  <div class="fgroup"><div class="flabel">Circle</div><select class="field"><option value="" selected disabled>Select Circle</option>${opt(CIRCLES)}</select></div>
+  <div class="fgroup"><div class="flabel">Site</div><select class="field"><option value="" selected disabled>Select Site</option>${opt(SITES)}</select></div>
+  <div class="fgroup"><div class="flabel">Work Type</div><select class="field"><option value="" selected disabled>Select Type</option>${opt(WTYPES)}</select></div>
+  <button class="btn mt20" onclick="submitSelfAssign()">Assign Work</button>
+  <button class="btn ghost mt12" onclick="go('work')">Cancel</button>`;
+}
+function submitSelfAssign(){ toast('Work assignment created (demo)'); go('work'); }
+
+/* ---------- REIMBURSEMENT ---------- */
+function tplReimb(){
+  const stClass = s => s.startsWith('Approved')?'info':(s==='Submitted'?'info':'neutral');
+  return `
+  <div class="card list-cta" onclick="startCreateClaim()">
+    <span class="plus">+</span>
+    <div class="grow"><div style="font-weight:800;font-size:14px;color:var(--p)">CREATE CLAIM</div>
+      <div class="muted" style="font-size:12.5px">Submit New Reimbursement Claim</div></div>
+    <span class="muted" style="font-size:20px">›</span>
+  </div>
+  <div class="sectlabel">Submitted Claims</div>
+  ${claims.map((c,i)=>{
+    const claimAmt=claimTotal(c); const exp=expenseCount(c);
+    return `<div class="card" style="padding:15px;cursor:pointer" onclick="go('claimdetail',${i})">
+      <div class="between"><span style="font-weight:700;font-size:13px">${c.id}</span><span class="muted" style="font-size:18px">›</span></div>
+      <div class="row mt8" style="align-items:center;gap:8px;flex-wrap:wrap">
+        <span class="chip info">${c.status}</span>
+        <span class="muted" style="font-size:12.5px">📅 ${fmt(c.date)}</span>
+        <span class="chip neutral" style="margin-left:auto">${c.type}</span>
+      </div>
+      <div class="row mt12">
+        <div class="kpi" style="background:var(--card2)"><div class="label">Claim Amount</div><div class="amt" style="margin-top:2px">₹${money(claimAmt)}</div></div>
+        <div class="kpi" style="background:${c.approved!=null?'var(--present)':'var(--card2)'}">
+          <div class="label" style="${c.approved!=null?'color:var(--present-tx)':''}">Approved</div>
+          <div class="amt" style="margin-top:2px;${c.approved!=null?'color:var(--present-tx)':'color:var(--neutral-tx);font-size:14px'}">${c.approved!=null?'₹'+money(c.approved):'Pending'}</div></div>
+      </div>
+      <div class="between mt12" style="font-size:12.5px;border-top:1px solid var(--border);padding-top:10px">
+        <span class="muted">Sites <b style="color:var(--text)">${c.sitesData.length}</b></span>
+        <span class="muted">Expenses <b style="color:var(--text)">${exp}</b></span>
+        <span class="muted">Type <b style="color:var(--text)">${c.multi?'Multiple Site':(c.type==='Local'?'Single Site':c.type)}</b></span>
+      </div>
+    </div>`;}).join('')}`;
+}
+function claimTotal(c){ return c.sitesData.reduce((s,site)=>s+site.items.reduce((a,it)=>a+it.amt,0),0); }
+function expenseCount(c){ return c.sitesData.reduce((s,site)=>s+site.items.length,0); }
+function toggleSite(ci,si){ const k=ci+'-'+si; expandedSites.has(k)?expandedSites.delete(k):expandedSites.add(k); go('claimdetail',ci); }
+
+function tplClaimDetail(i){
+  backTarget='reimb'; const c=claims[i]; const total=claimTotal(c);
+  return `
+  <div style="text-align:right"><span class="chip info">${c.status}</span></div>
+  <div class="card mt12">
+    <div class="row">
+      <div class="kpi" style="background:var(--card2)"><div class="label">Claim Amount</div><div class="amt" style="margin-top:3px">₹${money(total)}</div></div>
+      <div class="kpi" style="background:${c.approved!=null?'var(--present)':'var(--card2)'}"><div class="label" style="${c.approved!=null?'color:var(--present-tx)':''}">Approved Amount</div><div class="amt" style="margin-top:3px;${c.approved!=null?'color:var(--present-tx)':'color:var(--neutral-tx)'}">${c.approved!=null?'₹'+money(c.approved):'Pending'}</div></div>
+    </div>
+  </div>
+  <div class="card mt12">
+    <div style="font-weight:800;font-size:15px">📄 Basic Information</div>
+    <div class="row mt12">
+      <div class="grow"><div class="label">Date</div><div style="font-weight:700;margin-top:3px">${c.date}</div></div>
+      <div class="grow"><div class="label">Category</div><div style="font-weight:700;margin-top:3px">${c.type}</div></div>
+    </div>
+    <div class="row mt12">
+      <div class="grow"><div class="label">Purpose</div><div style="font-weight:700;margin-top:3px">${c.purpose||'—'}</div></div>
+      <div class="grow"><div class="label">Remarks</div><div style="font-weight:700;margin-top:3px">${c.remarks||'—'}</div></div>
+    </div>
+  </div>
+  <div class="card mt12">
+    <div class="between"><span style="font-weight:800;font-size:15px">📍 Sites & Expenses</span><span class="chip ok">${c.sitesData.length} Site${c.sitesData.length>1?'s':''}</span></div>
+    ${c.sitesData.map((s,si)=>{
+      const sTotal=s.items.reduce((a,it)=>a+it.amt,0);
+      const open=expandedSites.has(i+'-'+si);
+      return `<div class="mt12" style="background:var(--card2);border-radius:12px;overflow:hidden">
+        <div class="between" style="padding:12px;cursor:pointer" onclick="toggleSite(${i},${si})">
+          <span style="display:flex;align-items:center;gap:11px">
+            <span style="width:34px;height:34px;border-radius:50%;background:var(--pd);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700">${si+1}</span>
+            <span><b>${s.site}</b><div class="muted" style="font-size:12px">${s.items.length} expense(s)</div></span></span>
+          <span style="display:flex;align-items:center;gap:12px"><span class="amt">₹${money(sTotal)}</span>
+            <span class="chev ${open?'up':''}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--soft)" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span></span></div>
+        ${open ? `<div style="padding:0 12px 12px">${s.items.map(it=>`
+          <div class="expense-line"><span style="display:flex;gap:10px"><i class="dot" style="margin-top:6px"></i>
+            <span><div style="font-weight:600">${it.label}</div><div class="muted" style="font-size:11.5px">of ₹${money(it.amt)}</div></span></span>
+          <b>₹${money(it.amt)}</b></div>`).join('')}</div>` : ''}
+      </div>`;}).join('')}
+  </div>`;
+}
+
+/* ---------- CREATE CLAIM (functional) ---------- */
+let draft = null;
+function startCreateClaim(){ draft={type:'Local',multi:false,date:'2026-05-30',site:'',purpose:'',project:'',circle:'',remarks:'',sites:[],items:[]}; go('createclaim'); }
+function tplCreateClaim(){
+  backTarget='reimb';
+  if(!draft) draft={type:'Local',multi:false,date:'2026-05-30',site:'',project:'',circle:'',remarks:'',items:[]};
+  const single=!draft.multi, local=draft.type!=='Outstation';
+  return `
+  <div class="card"><div class="label" style="display:flex;align-items:center;gap:7px">📅 Date</div>
+    <input class="field mt8" type="date" value="${draft.date}" onchange="draft.date=this.value"></div>
+
+  <div class="card"><div class="label">Select Site</div>
+    <div class="seg mt10"><button class="${single?'on':''}" id="segSingle" onclick="setSite(false)">Single Site</button><button class="${single?'':'on'}" id="segMulti" onclick="setSite(true)">Multiple Site</button></div>
+    ${single ? `
+    <select class="field mt12" id="ccSite" onchange="draft.site=this.value"><option value="" ${draft.site?'':'selected'} disabled>Select Site</option>${opts(SITES,draft.site)}</select>
+    ` : `
+    <div class="pickfield mt12" onclick="openPurpose()"><span class="${draft.purpose?'':'ph'}">${draft.purpose||'Purpose'}</span><span class="chev2">⌄</span></div>
+    <div class="pickfield mt10" onclick="openProjectPick()"><span class="${draft.project?'':'ph'}">${draft.project||'Project'}</span><span class="chev2">⌄</span></div>
+    <button class="addsite mt12" onclick="openSitePicker()">Add Site</button>
+    <div class="mt10">${(draft.sites||[]).map((s,k)=>`<div class="added-item"><span>${s}</span><span class="x" onclick="removeSite(${k})">×</span></div>`).join('')}</div>
+    `}
+  </div>
+
+  <div class="card"><div class="label">Project</div>
+    ${single ? `<select class="field mt10" onchange="draft.project=this.value"><option value="" ${draft.project?'':'selected'} disabled>Select Project</option>${opts(PROJECTS,draft.project)}</select>
+    <select class="field mt12" onchange="draft.circle=this.value"><option value="" ${draft.circle?'':'selected'} disabled>Select Circle</option>${opts(CIRCLES,draft.circle)}</select>`
+    : `<select class="field mt10" onchange="draft.circle=this.value"><option value="" ${draft.circle?'':'selected'} disabled>Circle</option>${opts(CIRCLES,draft.circle)}</select>`}
+  </div>
+
+  <div class="card"><div class="label">Expense Type</div>
+    <div class="seg mt10"><button class="${local?'on':''}" id="segLocal" onclick="setExp('Local')">Local</button><button class="${local?'':'on'}" id="segOut" onclick="setExp('Outstation')">Outstation</button></div>
+  </div>
+
+  <div class="card"><div class="between"><span style="font-weight:700">Traveling</span><button class="btn sm" onclick="openTravel()">Add</button></div>
+    <div id="listTravel"></div></div>
+  <div class="card"><div class="between"><span style="font-weight:700">DA (Daily Allowance)</span><button class="btn sm" onclick="openDA()">Add</button></div>
+    <div id="listDA"></div></div>
+  <div class="card" id="hotelSection" style="display:${local?'none':'block'}"><div class="between"><span style="font-weight:700">Hotel / Lodging</span><button class="btn sm" onclick="openHotel()">Add</button></div>
+    <div id="listHotel"></div></div>
+  <div class="card"><div class="between"><span style="font-weight:700">Others</span><button class="btn sm" onclick="openOthers()">Add</button></div>
+    <div id="listOthers"></div></div>
+
+  <div class="card"><div class="label">Remarks</div><textarea class="field mt8" onchange="draft.remarks=this.value" placeholder="Enter Remarks">${draft.remarks||''}</textarea></div>
+
+  <div class="card between" style="background:var(--pd);color:#fff"><span style="font-weight:700">Claim Total</span><span class="amt" id="ccTotal">₹0.00</span></div>
+
+  <div class="row mt16">
+    <button class="btn danger grow" onclick="go('reimb')">Cancel</button>
+    <button class="btn grow" onclick="submitClaim()">Submit</button>
+  </div>`;
+}
+function setSite(multi){ draft.multi=multi; go('createclaim'); }
+function setExp(t){ draft.type=t;
+  document.getElementById('segLocal').classList.toggle('on',t==='Local');
+  document.getElementById('segOut').classList.toggle('on',t==='Outstation');
+  const h=document.getElementById('hotelSection'); if(h) h.style.display = t==='Outstation'?'block':'none';
+}
+
+/* ---- multi-site pickers ---- */
+function pickerSheet(title, list, handler){
+  openFlowSheet(title, `<input class="field" placeholder="🔍  Search" oninput="filterPickerList(this.value)">
+    <div id="pickerList" class="mt12">${list.map(x=>`<div class="pick-row" data-v="${x.toLowerCase()}" onclick="${handler}('${x.replace(/'/g,"\\'")}')">${x}</div>`).join('')}</div>`);
+}
+function filterPickerList(v){ const ql=v.toLowerCase(); document.querySelectorAll('#pickerList .pick-row').forEach(r=>{ r.style.display=r.dataset.v.includes(ql)?'':'none'; }); }
+function openPurpose(){ pickerSheet('Select Purpose', PURPOSES, 'pickPurpose'); }
+function pickPurpose(v){ draft.purpose=v; closeSheet(); go('createclaim'); }
+function openProjectPick(){ pickerSheet('Select Project', PROJECTS, 'pickProject'); }
+function pickProject(v){ draft.project=v; closeSheet(); go('createclaim'); }
+function openSitePicker(){ pendingSites=(draft.sites||[]).slice(); openFlowSheet('Select Site', sitePickerBody()); }
+function sitePickerBody(){
+  return `<input class="field" placeholder="🔍  Search" oninput="filterPickerList(this.value)">
+    <div id="pickerList" class="mt12">${SITES.map(s=>`<div class="pick-row" data-v="${s.toLowerCase()}" onclick="toggleSiteSel('${s.replace(/'/g,"\\'")}')">
+      <span class="cbx ${pendingSites.includes(s)?'on':''}">${pendingSites.includes(s)?'✓':''}</span><span>${s}</span></div>`).join('')}</div>
+    <button class="btn mt16" onclick="confirmSites()">Submit</button>`;
+}
+function toggleSiteSel(s){ const i=pendingSites.indexOf(s); i>=0?pendingSites.splice(i,1):pendingSites.push(s); document.getElementById('flowBody').innerHTML=sitePickerBody(); }
+function confirmSites(){ draft.sites=pendingSites.slice(); closeSheet(); go('createclaim'); toast(draft.sites.length+' site(s) selected'); }
+function removeSite(k){ draft.sites.splice(k,1); go('createclaim'); }
+
+/* ---- receipt card (shared) ---- */
+function receiptCard(){ return `<div class="card mt12 between" style="background:var(--card2)">
+  <div><div style="font-weight:700;font-size:13.5px">Attach Receipt</div><div class="muted" style="font-size:11.5px;margin-top:2px">Upload receipt for reimbursement claim</div></div>
+  <button class="btn sm" style="width:auto" onclick="toast('File picker (demo)')">⬆ Upload</button></div>`; }
+
+/* ---- Add Travel Entry (full page) ---- */
+function openTravel(){ go('addtravel'); }
+function tplAddTravel(){
+  backTarget='createclaim';
+  return `
+  <div class="fgroup"><select class="field" id="tvMode"><option value="" selected disabled>Mode</option>${TMODES.map(m=>`<option>${m}</option>`).join('')}</select></div>
+  <div class="fgroup"><input class="field" id="tvAmt" inputmode="decimal" placeholder="Amount"></div>
+  <div class="fgroup"><select class="field" id="tvWith"><option value="" selected disabled>Traveling With</option>${['Alone','With Colleague','With Team'].map(x=>`<option>${x}</option>`).join('')}</select></div>
+  <div class="fgroup"><input class="field" id="tvFrom" placeholder="From"></div>
+  <div class="fgroup"><input class="field" id="tvTo" placeholder="To"></div>
+  ${receiptCard()}
+  <div class="row mt20"><button class="btn danger grow" onclick="go('createclaim')">Cancel</button>
+    <button class="btn grow" onclick="submitTravel()">Submit</button></div>`;
+}
+function submitTravel(){
+  const mode=val('tvMode'), amt=parseFloat(val('tvAmt'))||0;
+  if(!mode){ toast('Please select a mode'); return; }
+  if(!amt){ toast('Please enter an amount'); return; }
+  draft.items.push({cat:'Travel',mode,amt,withWhom:val('tvWith'),from:val('tvFrom'),to:val('tvTo'),label:'Travel · '+mode});
+  go('createclaim'); toast('Travel entry added');
+}
+
+/* ---- DA / Hotel / Others (bottom sheets) ---- */
+function openDA(){ openFlowSheet('Add DA Entry', `<input class="field" id="daAmt" inputmode="decimal" placeholder="Amount">${receiptCard()}
+  <div class="row mt20"><button class="btn danger grow" onclick="closeSheet()">Cancel</button><button class="btn grow" onclick="submitDA()">Submit</button></div>`); }
+function submitDA(){ const amt=parseFloat(val('daAmt'))||0; if(!amt){toast('Please enter an amount');return;}
+  draft.items.push({cat:'DA',amt,label:'Daily Allowance'}); closeSheet(); renderDraftLists(); toast('DA entry added'); }
+
+function openHotel(){ openFlowSheet('Add Hotel Entry', `<input class="field" id="htAmt" inputmode="decimal" placeholder="Amount">${receiptCard()}
+  <div class="row mt20"><button class="btn danger grow" onclick="closeSheet()">Cancel</button><button class="btn grow" onclick="submitHotel()">Submit</button></div>`); }
+function submitHotel(){ const amt=parseFloat(val('htAmt'))||0; if(!amt){toast('Please enter an amount');return;}
+  draft.items.push({cat:'Hotel',amt,label:'Hotel / Lodging'}); closeSheet(); renderDraftLists(); toast('Hotel entry added'); }
+
+function openOthers(){ openFlowSheet('Enter Others Entry', `<input class="field" id="otCat" placeholder="Category"><input class="field mt12" id="otAmt" inputmode="decimal" placeholder="Amount">${receiptCard()}
+  <div class="row mt20"><button class="btn danger grow" onclick="closeSheet()">Cancel</button><button class="btn grow" onclick="submitOthers()">Submit</button></div>`); }
+function submitOthers(){ const cat=val('otCat'), amt=parseFloat(val('otAmt'))||0; if(!cat){toast('Please enter a category');return;} if(!amt){toast('Please enter an amount');return;}
+  draft.items.push({cat:'Others',amt,desc:cat,label:cat}); closeSheet(); renderDraftLists(); toast('Expense added'); }
+
+function removeItem(idx){ draft.items.splice(idx,1); renderDraftLists(); }
+function renderDraftLists(){
+  const groups={Travel:'listTravel',DA:'listDA',Hotel:'listHotel',Others:'listOthers'};
+  for(const cat in groups){
+    const el=document.getElementById(groups[cat]); if(!el) continue;
+    const rows=draft.items.map((it,idx)=>({it,idx})).filter(o=>o.it.cat===cat);
+    el.innerHTML = rows.map(o=>{
+      const sub = o.it.cat==='Travel' && (o.it.from||o.it.to) ? `<div class="muted" style="font-size:11px">${o.it.from||'—'} → ${o.it.to||'—'}</div>` : '';
+      return `<div class="added-item"><span>${o.it.label}${sub}</span><span><b>₹${money(o.it.amt)}</b> <span class="x" onclick="removeItem(${o.idx})">×</span></span></div>`;
+    }).join('');
+  }
+  const total=draft.items.reduce((a,it)=>a+it.amt,0);
+  const t=document.getElementById('ccTotal'); if(t) t.textContent='₹'+money(total);
+}
+function submitClaim(){
+  const dt=draft.date||'2026-05-30';
+  const newId=()=>'CLM-'+dt.replace(/-/g,'')+'-'+Math.random().toString(16).slice(2,10).toUpperCase();
+  if(draft.items.length===0){ toast('Add at least one expense'); return; }
+  if(draft.multi){
+    if(!draft.purpose){ toast('Please select a purpose'); return; }
+    if(!(draft.sites&&draft.sites.length)){ toast('Add at least one site'); return; }
+    const sitesData=draft.sites.map((s,idx)=>({site:s, items: idx===0?draft.items.slice():[]}));
+    claims.unshift({ id:newId(), status:'Submitted', date:dt, type:draft.type, multi:true,
+      purpose:draft.purpose, remarks:draft.remarks||'', sitesData, approved:null });
+    toast('Claim submitted successfully'); go('reimb'); return;
+  }
+  const site=draft.site||(document.getElementById('ccSite')&&document.getElementById('ccSite').value);
+  if(!site){ toast('Please select a site'); return; }
+  claims.unshift({ id:newId(), status:'Submitted', date:dt, type:draft.type,
+    purpose:'', remarks:draft.remarks||'',
+    sitesData:[{ site, items:draft.items.slice() }], approved:null });
+  toast('Claim submitted successfully');
+  go('reimb');
+}
+
+/* ---------- APPLY LEAVE ---------- */
+function openLeave(){ backTarget='dashboard'; go('leave'); }
+function tplLeave(){
+  backTarget='dashboard';
+  return `
+  <div class="fgroup"><div class="flabel">Leave Start Date *</div><input class="field" type="date" id="lvStart"></div>
+  <div class="fgroup"><div class="flabel">Leave End Date *</div><input class="field" type="date" id="lvEnd"></div>
+  <div class="fgroup"><div class="flabel">Leave Type *</div><select class="field" id="lvType"><option value="" selected disabled>Select Leave Type</option>${LTYPES.map(x=>`<option>${x}</option>`).join('')}</select></div>
+  <div class="fgroup"><div class="flabel">Reason *</div><textarea class="field" id="lvReason" placeholder="Enter reason"></textarea></div>
+  <div class="fgroup">
+    <div class="label" style="margin-bottom:8px">Attachment (Optional)</div>
+    <div class="field" style="display:flex;align-items:center;gap:11px;cursor:pointer" onclick="toast('File picker (demo)')"><span style="color:var(--p);font-size:18px">📎</span><span class="muted">No file selected</span></div>
+    <div class="muted" style="font-size:11.5px;margin-top:7px">Supported: PDF, JPG, PNG (Max 5MB)</div>
+  </div>
+  <button class="btn mt20" onclick="submitLeave()">Submit Leave Request</button>`;
+}
+function submitLeave(){
+  if(!document.getElementById('lvStart').value || !document.getElementById('lvType').value){ toast('Please fill required fields'); return; }
+  toast('Leave request submitted'); go('dashboard');
+}
+
+/* ---------- THEME SHEET ---------- */
+function renderSheet(){
+  const b=document.getElementById('sheetBody');
+  let rows = Object.keys(THEMES).map(k=>{
+    const t=THEMES[k];
+    return `<div class="theme-row ${state.theme===k?'sel':''}" onclick="pickTheme('${k}')">
+      <span class="swatch"><i style="background:${t.pd}"></i><i style="background:${t.cardL}"></i></span>
+      <span class="tname">${t.name}</span><span class="tick">✓</span></div>`;
+  }).join('');
+  const appearance = `<div class="label" style="padding:18px 14px 6px">Appearance</div>` +
+    [['light','☀️','Light'],['dark','🌙','Dark']].map(([m,ic,nm])=>`
+      <div class="theme-row ${state.mode===m?'sel':''}" onclick="pickMode('${m}')">
+        <span style="width:42px;text-align:center;font-size:22px">${ic}</span>
+        <span class="tname">${nm}</span><span class="tick">✓</span></div>`).join('');
+  b.innerHTML = rows + appearance;
+}
+function pickTheme(k){ state.theme=k; applyTheme(); renderSheet(); }
+function pickMode(m){ state.mode=m; applyTheme(); renderSheet(); }
+
+/* ---------- helpers ---------- */
+function money(n){ return Number(n).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function val(id){ const e=document.getElementById(id); return e?e.value:''; }
+function opts(arr,sel){ return arr.map(x=>`<option ${x===sel?'selected':''}>${x}</option>`).join(''); }
+function stgLabel(s){ return {pending:'Pending',accepted:'Accepted',inprogress:'In Progress',completed:'Completed'}[s]||s; }
+function stgChip(s){ return s==='completed'?'ok':(s==='accepted'?'info':'warn'); }
+function openFlowSheet(title, body){
+  document.getElementById('flowTitle').textContent=title;
+  document.getElementById('flowBody').innerHTML=body;
+  document.getElementById('flowSheet').classList.add('open');
+  document.getElementById('scrim').classList.add('show');
+}
+function fmt(d){ const m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const x=new Date(d); return x.getDate()+' '+m[x.getMonth()]+' '+x.getFullYear(); }
+
+/* ---------- boot ---------- */
+applyTheme();
+go('login');
+</script>
+</body>
+</html>
