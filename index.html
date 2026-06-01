@@ -20,8 +20,9 @@
   --neutral:#e2ddd2; --neutral-tx:#9a9183;
   --absent:#c0584f; --present:#d8efdd; --present-tx:#2f6b3f;
   --submit:#1f3a55; --idle:#f3d9ef; --idle-tx:#9a3d86;
-  --r:16px; --rs:12px;
-  --shadow:0 6px 18px -10px rgba(0,0,0,.28);
+  --r:12px; --rs:10px; --rb:8px;
+  --shadow:0 1px 2px rgba(0,0,0,.04), 0 1px 1px rgba(0,0,0,.025);
+  --shadow-md:0 4px 14px -8px rgba(0,0,0,.18);
   --fs:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
 }
 html,body{height:100%}
@@ -48,69 +49,73 @@ body::before{content:"";position:fixed;inset:0;background:
 }
 
 .statusbar{height:44px;display:flex;align-items:center;justify-content:space-between;
-  padding:8px 24px 0;font-size:13px;font-weight:600;color:#fff;background:var(--p);flex:0 0 auto;transition:background .3s}
+  padding:8px 16px 0;font-size:13px;font-weight:600;color:#fff;background:var(--p);flex:0 0 auto;transition:background .3s}
 .statusbar.light{color:var(--text);background:var(--bg)}
 .sb-r{display:flex;gap:6px;align-items:center;font-size:11px}
 
-.appbar{display:flex;align-items:center;justify-content:space-between;padding:10px 18px 16px;
+.appbar{display:flex;align-items:center;justify-content:space-between;padding:8px 16px 16px;
   background:var(--p);color:#fff;flex:0 0 auto;transition:background .3s}
-.appbar .left{display:flex;align-items:center;gap:14px}
-.appbar h1{font-size:20px;font-weight:700;letter-spacing:.2px}
-.appbar .ic{width:24px;height:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:21px;line-height:1}
-.appbar .ic svg{width:23px;height:23px;stroke:#fff;fill:none;stroke-width:2}
-.back{font-size:24px;cursor:pointer;line-height:1}
+.appbar .left{display:flex;align-items:center;gap:12px}
+.appbar h1{font-size:18px;font-weight:700;letter-spacing:0}
+.appbar .ic{width:24px;height:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;line-height:1}
+.appbar .ic svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2}
+.back{font-size:22px;cursor:pointer;line-height:1}
 
 .view{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
 .view::-webkit-scrollbar{width:0}
-.pad{padding:18px 16px 90px}
+.pad{padding:16px 16px 96px}
 
 /* generic ui */
-.card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:16px}
-.card+.card{margin-top:14px}
-.label{font-size:10px;letter-spacing:1.1px;text-transform:uppercase;color:var(--soft);font-weight:700}
-.chip{font-size:11px;font-weight:700;padding:5px 12px;border-radius:999px;display:inline-block}
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:16px;border:1px solid var(--border)}
+.card+.card{margin-top:12px}
+.label{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--soft);font-weight:700}
+.chip{font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;display:inline-block;line-height:1.45}
 .chip.info{background:var(--info);color:var(--info-tx)}
 .chip.ok{background:var(--ok);color:var(--ok-tx)}
 .chip.warn{background:var(--warn-bg);color:var(--warn-tx)}
 .chip.neutral{background:var(--neutral);color:#6b6457}
-.row{display:flex;gap:10px}
+.row{display:flex;gap:8px}
 .grow{flex:1}
 .between{display:flex;align-items:center;justify-content:space-between}
 .muted{color:var(--soft)}
-.mt6{margin-top:6px}.mt8{margin-top:8px}.mt10{margin-top:10px}.mt12{margin-top:12px}.mt16{margin-top:16px}.mt20{margin-top:20px}
-.sectlabel{font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:var(--soft);font-weight:700;margin:18px 2px 9px}
+.mt4{margin-top:4px}.mt6{margin-top:6px}.mt8{margin-top:8px}.mt10{margin-top:10px}.mt12{margin-top:12px}.mt16{margin-top:16px}.mt20{margin-top:20px}.mt24{margin-top:24px}
+.sectlabel{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--soft);font-weight:700;margin:16px 0 8px}
 
-.btn{display:block;width:100%;text-align:center;padding:15px;border:none;border-radius:14px;font-weight:700;
+.btn{display:block;width:100%;text-align:center;padding:14px;border:none;border-radius:12px;font-weight:700;
   font-size:15px;font-family:var(--fs);cursor:pointer;
-  background:linear-gradient(120deg,var(--pd),var(--pl));color:#fff;box-shadow:0 8px 18px -10px rgba(0,0,0,.5)}
+  background:var(--p);color:#fff;box-shadow:none;letter-spacing:.1px;transition:background .15s}
 .btn:active{transform:translateY(1px)}
-.btn.ghost{background:transparent;color:var(--p);border:1.6px solid var(--p);box-shadow:none}
-.btn.danger{background:transparent;color:var(--absent);border:1.6px solid var(--absent);box-shadow:none}
-.btn.sm{padding:10px 18px;width:auto;border-radius:11px;font-size:13px}
+.btn:hover{background:var(--pd)}
+.btn.ghost{background:transparent;color:var(--p);border:1px solid var(--p)}
+.btn.ghost:hover{background:rgba(45,90,61,.06)}
+.btn.danger{background:transparent;color:var(--absent);border:1px solid var(--absent)}
+.btn.danger:hover{background:rgba(192,88,79,.06)}
+.btn.sm{padding:8px 14px;width:auto;border-radius:8px;font-size:13px}
 
-.field{width:100%;border:1px solid var(--border);background:#fff;border-radius:12px;padding:14px 14px;
-  font-size:14px;font-family:var(--fs);color:var(--text);margin-top:0}
+.field{width:100%;border:1px solid var(--border);background:#fff;border-radius:10px;padding:12px 14px;
+  font-size:14px;font-family:var(--fs);color:var(--text);line-height:1.4}
 .field::placeholder{color:#aaa298}
+.field:focus{outline:none;border-color:var(--p);box-shadow:0 0 0 3px rgba(45,90,61,.08)}
 select.field{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%237a746a' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 14px center;padding-right:40px;cursor:pointer}
-textarea.field{resize:none;min-height:96px}
-.flabel{font-size:13px;font-weight:600;color:var(--text);margin:0 2px 7px}
-.fgroup+.fgroup{margin-top:14px}
+  background-repeat:no-repeat;background-position:right 12px center;padding-right:40px;cursor:pointer}
+textarea.field{resize:none;min-height:88px}
+.flabel{font-size:12px;font-weight:600;color:var(--text);margin:0 0 6px;letter-spacing:.1px}
+.fgroup+.fgroup{margin-top:12px}
 
 /* segmented toggle */
-.seg{display:flex;background:var(--card2);border-radius:13px;padding:5px;gap:4px}
-.seg button{flex:1;border:none;background:transparent;padding:11px;border-radius:10px;font-weight:600;
-  font-size:13.5px;color:var(--soft);font-family:var(--fs);cursor:pointer;transition:.2s}
-.seg button.on{background:linear-gradient(120deg,var(--pd),var(--pl));color:#fff;font-weight:700}
+.seg{display:flex;background:var(--card2);border-radius:10px;padding:4px;gap:4px}
+.seg button{flex:1;border:none;background:transparent;padding:10px;border-radius:8px;font-weight:600;
+  font-size:13px;color:var(--soft);font-family:var(--fs);cursor:pointer;transition:.2s}
+.seg button.on{background:var(--p);color:#fff;font-weight:700}
 
 /* tabs */
-.tabs{display:flex;margin:16px 2px 0;position:relative;border-bottom:1px solid var(--card2)}
-.tabs button{flex:1;border:none;background:transparent;padding:10px 4px 12px;font-size:13.5px;font-weight:700;
-  color:var(--soft);font-family:var(--fs);cursor:pointer;transition:color .2s}
+.tabs{display:flex;margin:16px 0 0;position:relative;border-bottom:1px solid var(--border)}
+.tabs button{flex:1;border:none;background:transparent;padding:12px 4px;font-size:13px;font-weight:700;
+  color:var(--soft);font-family:var(--fs);cursor:pointer;transition:color .2s;letter-spacing:.1px}
 .tabs button.on{color:var(--p)}
-.tab-ind{position:absolute;bottom:-1px;left:0;height:3px;background:var(--p);border-radius:3px 3px 0 0;width:0;
+.tab-ind{position:absolute;bottom:-1px;left:0;height:2px;background:var(--p);border-radius:2px;width:0;
   transform:translateX(0);transition:transform .28s cubic-bezier(.2,.7,.3,1),width .28s cubic-bezier(.2,.7,.3,1);pointer-events:none}
-.tab-viewport{overflow:hidden;margin-top:12px;touch-action:pan-y}
+.tab-viewport{overflow:hidden;margin-top:16px;touch-action:pan-y}
 .tab-track{display:flex;transition:transform .28s cubic-bezier(.2,.7,.3,1);will-change:transform}
 .tab-pane{flex:0 0 100%;width:100%;min-width:0}
 .tab-pane>.card:first-child{margin-top:0}
@@ -119,126 +124,127 @@ textarea.field{resize:none;min-height:96px}
 .scrim{position:absolute;inset:0;background:rgba(20,20,18,.45);opacity:0;pointer-events:none;transition:.25s;z-index:30}
 .scrim.show{opacity:1;pointer-events:auto}
 .drawer{position:absolute;top:0;left:0;bottom:0;width:80%;max-width:320px;background:var(--bg);
-  transform:translateX(-104%);transition:transform .28s cubic-bezier(.4,0,.2,1);z-index:40;display:flex;flex-direction:column}
+  transform:translateX(-104%);transition:transform .28s cubic-bezier(.4,0,.2,1);z-index:40;display:flex;flex-direction:column;box-shadow:var(--shadow-md)}
 .drawer.open{transform:translateX(0)}
-.drawer .head{background:var(--p);color:#fff;padding:26px 22px 22px}
-.drawer .logo{width:60px;height:60px;border-radius:18px;background:#fff;display:flex;align-items:center;justify-content:center;
-  color:var(--p);font-weight:800;font-size:30px;box-shadow:0 8px 18px -8px rgba(0,0,0,.4)}
-.drawer .uname{font-weight:700;font-size:17px;margin-top:14px}
-.drawer .umail{font-size:12.5px;opacity:.85;margin-top:2px}
-.drawer .nav{padding:10px 0;flex:1}
-.dnav{display:flex;align-items:center;gap:16px;padding:15px 22px;font-size:15px;font-weight:600;color:var(--text);cursor:pointer}
+.drawer .head{background:var(--p);color:#fff;padding:24px 16px 20px}
+.drawer .logo{width:48px;height:48px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;
+  color:var(--p);font-weight:800;font-size:24px}
+.drawer .uname{font-weight:700;font-size:16px;margin-top:12px;letter-spacing:.1px}
+.drawer .umail{font-size:12px;opacity:.8;margin-top:2px}
+.drawer .nav{padding:8px 0;flex:1}
+.dnav{display:flex;align-items:center;gap:14px;padding:12px 16px;font-size:14px;font-weight:600;color:var(--text);cursor:pointer}
 .dnav .di{width:24px;display:flex;justify-content:center;font-size:18px}
 .dnav.active{background:var(--card2)}
 .dnav.active .dlabel{color:var(--p)}
 
 /* bottom sheet */
-.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--card);border-radius:22px 22px 0 0;z-index:45;
-  transform:translateY(102%);transition:transform .3s cubic-bezier(.4,0,.2,1);max-height:82%;display:flex;flex-direction:column}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--card);border-radius:16px 16px 0 0;z-index:45;
+  transform:translateY(102%);transition:transform .3s cubic-bezier(.4,0,.2,1);max-height:82%;display:flex;flex-direction:column;box-shadow:var(--shadow-md)}
 .sheet.open{transform:translateY(0)}
-.sheet .grip{width:40px;height:5px;border-radius:3px;background:var(--border);margin:11px auto 4px}
-.sheet .shead{padding:6px 22px 10px;font-size:18px;font-weight:700}
-.sheet .sbody{overflow-y:auto;padding:0 14px 26px}
-.theme-row{display:flex;align-items:center;gap:14px;padding:14px;border-radius:13px;cursor:pointer}
+.sheet .grip{width:36px;height:4px;border-radius:2px;background:var(--border);margin:10px auto 4px}
+.sheet .shead{padding:8px 16px 12px;font-size:16px;font-weight:700;letter-spacing:.1px}
+.sheet .sbody{overflow-y:auto;padding:0 16px 24px}
+.theme-row{display:flex;align-items:center;gap:12px;padding:12px;border-radius:10px;cursor:pointer}
 .theme-row.sel{background:var(--card2)}
-.swatch{width:42px;height:42px;border-radius:11px;display:flex;overflow:hidden;flex:0 0 auto;border:1px solid rgba(0,0,0,.06)}
+.swatch{width:36px;height:36px;border-radius:8px;display:flex;overflow:hidden;flex:0 0 auto;border:1px solid rgba(0,0,0,.06)}
 .swatch i{flex:1;display:block}
-.theme-row .tname{flex:1;font-size:15px;font-weight:600}
-.theme-row .tick{color:var(--p);font-weight:800;font-size:18px;opacity:0}
+.theme-row .tname{flex:1;font-size:14px;font-weight:600}
+.theme-row .tick{color:var(--p);font-weight:800;font-size:16px;opacity:0}
 .theme-row.sel .tick{opacity:1}
 
 /* slide to start */
-.slider{position:relative;height:62px;border-radius:16px;background:linear-gradient(120deg,var(--pd),var(--pl));
-  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:15px;overflow:hidden;user-select:none}
-.slider .knob{position:absolute;left:6px;top:6px;width:50px;height:50px;border-radius:12px;background:#fff;color:var(--p);
-  display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 10px -3px rgba(0,0,0,.4);
-  cursor:grab;touch-action:none;z-index:2}
+.slider{position:relative;height:56px;border-radius:12px;background:var(--p);
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;overflow:hidden;user-select:none;letter-spacing:.2px}
+.slider .knob{position:absolute;left:4px;top:4px;width:48px;height:48px;border-radius:9px;background:#fff;color:var(--p);
+  display:flex;align-items:center;justify-content:center;font-size:20px;
+  cursor:grab;touch-action:none;z-index:2;box-shadow:0 1px 3px rgba(0,0,0,.12)}
 .slider.done{background:linear-gradient(120deg,#5a4a1f,#b59038)}
 
 /* calendar */
 .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.cal-nav{width:36px;height:36px;border-radius:50%;background:var(--p);color:#fff;border:none;font-size:18px;cursor:pointer;
+.cal-nav{width:32px;height:32px;border-radius:50%;background:var(--p);color:#fff;border:none;font-size:16px;cursor:pointer;
   display:flex;align-items:center;justify-content:center;flex:0 0 auto}
-.cal-title{font-weight:700;font-size:15px}
-.cal-tbl{width:100%;table-layout:fixed;border-collapse:separate;border-spacing:5px;margin:0 -5px}
-.cal-tbl th{font-size:11px;color:var(--soft);font-weight:700;text-align:center;padding-bottom:3px}
-.cal-tbl td.cal-cell{border-radius:7px;text-align:center;font-size:13px;font-weight:700;vertical-align:middle;padding:0}
+.cal-title{font-weight:700;font-size:14px;letter-spacing:.1px}
+.cal-tbl{width:100%;table-layout:fixed;border-collapse:separate;border-spacing:4px;margin:0 -4px}
+.cal-tbl th{font-size:10px;color:var(--soft);font-weight:700;text-align:center;padding-bottom:4px;letter-spacing:.5px}
+.cal-tbl td.cal-cell{border-radius:6px;text-align:center;font-size:12px;font-weight:700;vertical-align:middle;padding:0}
 .cal-tbl td.cal-cell.empty{background:transparent}
 /* uniform profile fact boxes */
-.facts{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.facts .fact{display:flex;flex-direction:column;justify-content:center;padding:11px 13px;margin:0}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.facts .fact{display:flex;flex-direction:column;justify-content:center;padding:12px;margin:0}
 .fact .label{font-size:9px;letter-spacing:.4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.fact .fval{font-weight:700;font-size:13.5px;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fact .fval{font-weight:700;font-size:13px;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.1px}
 
-.summary-row{display:flex;align-items:center;justify-content:space-between;padding:11px 2px;border-bottom:1px solid var(--border);font-size:14px}
+.summary-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
 .summary-row:last-child{border-bottom:none}
-.sq{width:14px;height:14px;border-radius:4px;display:inline-block;margin-right:11px;vertical-align:-2px}
+.sq{width:12px;height:12px;border-radius:3px;display:inline-block;margin-right:10px;vertical-align:-2px}
 
 /* claim / work cards */
-.list-cta{display:flex;align-items:center;gap:13px;cursor:pointer}
-.list-cta .plus{width:38px;height:38px;border-radius:11px;background:var(--present);color:var(--p);display:flex;
-  align-items:center;justify-content:center;font-size:21px;flex:0 0 auto}
-.amt{font-weight:800;font-size:17px}
-.kpi{flex:1;border-radius:12px;padding:11px 13px}
-.tgt-hero{font-size:30px;font-weight:800;margin-top:6px;letter-spacing:-.02em;color:var(--text);line-height:1.1}
-.tgt-hero-sub{font-size:12.5px;color:var(--soft);margin-top:4px}
+.list-cta{display:flex;align-items:center;gap:12px;cursor:pointer}
+.list-cta .plus{width:36px;height:36px;border-radius:10px;background:var(--present);color:var(--p);display:flex;
+  align-items:center;justify-content:center;font-size:20px;flex:0 0 auto}
+.amt{font-weight:800;font-size:16px;letter-spacing:.1px}
+.kpi{flex:1;border-radius:10px;padding:12px}
+.tgt-hero{font-size:28px;font-weight:800;margin-top:8px;letter-spacing:-.02em;color:var(--text);line-height:1.1}
+.tgt-hero-sub{font-size:12px;color:var(--soft);margin-top:4px}
 .tgt-hero-sub .pos{color:var(--present-tx);font-weight:700}
-.tgt-hero-sub .neg{color:#c44;font-weight:700}
-.tgt-bar{height:9px;border-radius:6px;background:var(--card2);overflow:hidden}
-.tgt-bar-fill{height:100%;background:linear-gradient(90deg,var(--pd),var(--pl));transition:width .4s ease}
-.tgt-stat{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-top:1px solid var(--card2)}
-.tgt-stat:first-child{border-top:none;padding-top:2px}
-.tgt-stat:last-child{padding-bottom:2px}
-.tgt-stat-lbl{color:var(--soft);font-size:13.5px;font-weight:600}
-.tgt-stat-val{font-weight:800;font-size:14.5px;color:var(--text)}
-.tgt-stat-pct{font-weight:600;font-size:12px;color:var(--soft);margin-left:10px}
-.pj-name{font-weight:800;font-size:15px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pj-meta{font-size:11.5px;color:var(--soft);margin-top:3px}
-.pj-stats{display:flex;gap:8px;font-size:12.5px;color:var(--soft);align-items:center;flex-wrap:wrap}
+.tgt-hero-sub .neg{color:var(--absent);font-weight:700}
+.tgt-bar{height:6px;border-radius:3px;background:var(--card2);overflow:hidden}
+.tgt-bar-fill{height:100%;background:var(--p);transition:width .4s ease;border-radius:3px}
+.tgt-stat{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-top:1px solid var(--border)}
+.tgt-stat:first-child{border-top:none;padding-top:0}
+.tgt-stat:last-child{padding-bottom:0}
+.tgt-stat-lbl{color:var(--soft);font-size:13px;font-weight:600}
+.tgt-stat-val{font-weight:700;font-size:14px;color:var(--text);letter-spacing:.1px}
+.tgt-stat-pct{font-weight:600;font-size:12px;color:var(--soft);margin-left:8px}
+.pj-name{font-weight:700;font-size:15px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.1px}
+.pj-meta{font-size:12px;color:var(--soft);margin-top:4px}
+.pj-stats{display:flex;gap:8px;font-size:12px;color:var(--soft);align-items:center;flex-wrap:wrap}
 .pj-stats b{color:var(--text);font-weight:700}
-.pj-sep{opacity:.5}
-.expense-line{display:flex;align-items:center;justify-content:space-between;background:var(--card);border-radius:11px;
-  padding:11px 13px;margin-top:8px}
+.pj-sep{opacity:.4}
+.expense-line{display:flex;align-items:center;justify-content:space-between;background:var(--card);border-radius:10px;
+  padding:12px;margin-top:8px;border:1px solid var(--border)}
 .expense-line .dot{width:8px;height:8px;border-radius:50%;background:var(--p);display:inline-block;flex:0 0 auto}
 .chev{display:inline-flex;transition:transform .2s}
 .chev.up{transform:rotate(180deg)}
 
-.added-item{display:flex;align-items:center;justify-content:space-between;background:var(--card2);border-radius:11px;
-  padding:10px 13px;margin-top:8px;font-size:13.5px}
+.added-item{display:flex;align-items:center;justify-content:space-between;background:var(--card2);border-radius:10px;
+  padding:10px 12px;margin-top:8px;font-size:13px}
 .added-item .x{color:var(--absent);cursor:pointer;font-weight:700;font-size:16px;padding:0 4px}
 
-.toast{position:absolute;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:#222;color:#fff;
-  padding:13px 20px;border-radius:12px;font-size:13.5px;font-weight:600;opacity:0;pointer-events:none;transition:.3s;z-index:60;
-  max-width:88%;text-align:center;box-shadow:0 10px 24px -8px rgba(0,0,0,.5)}
+.toast{position:absolute;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:#222;color:#fff;
+  padding:12px 18px;border-radius:10px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:.3s;z-index:60;
+  max-width:88%;text-align:center;box-shadow:0 6px 16px -6px rgba(0,0,0,.35)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-.empty{text-align:center;color:var(--soft);padding:40px 20px;font-size:14px}
-.locrow{display:flex;align-items:center;gap:13px;margin-top:14px;cursor:pointer}
-.locicon{width:38px;height:38px;border-radius:50%;background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-size:17px;flex:0 0 auto}
-.locrow #locText{color:var(--soft);font-size:14px}
+.empty{text-align:center;color:var(--soft);padding:32px 16px;font-size:14px}
+.locrow{display:flex;align-items:center;gap:12px;margin-top:12px;cursor:pointer}
+.locicon{width:32px;height:32px;border-radius:50%;background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;flex:0 0 auto}
+.locrow #locText{color:var(--soft);font-size:13px}
 .locrow #locText.capd{color:var(--present-tx);font-weight:600}
-.facts .fact{box-shadow:0 2px 8px -6px rgba(0,0,0,.25)}
+.facts .fact{box-shadow:none;border:1px solid var(--border)}
 
 .hidden{display:none!important}
-.btn.redbtn{background:linear-gradient(120deg,#8c3b34,#c0584f)}
-.actionbar{position:sticky;bottom:0;background:linear-gradient(transparent,var(--bg) 28%);padding:16px 0 4px;margin-top:18px}
+.btn.redbtn{background:var(--absent)}
+.btn.redbtn:hover{background:#a8463e}
+.actionbar{position:sticky;bottom:0;background:linear-gradient(transparent,var(--bg) 32%);padding:16px 0 0;margin-top:16px}
 .chip.oos{background:#f6dede;color:#b34a42}
-.cbx{width:24px;height:24px;border-radius:7px;border:2px solid var(--p);display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:14px;flex:0 0 auto;cursor:pointer;background:transparent}
+.cbx{width:22px;height:22px;border-radius:6px;border:1.6px solid var(--p);display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px;flex:0 0 auto;cursor:pointer;background:transparent}
 .cbx.on{background:var(--p)}
-.selrow{display:flex;align-items:center;gap:13px;padding:12px 2px;font-size:15px;font-weight:600;cursor:pointer}
-.photo-circle{width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,var(--pd),var(--pl));color:#fff;
-  display:flex;align-items:center;justify-content:center;font-size:34px;margin:6px auto 0;cursor:pointer;box-shadow:0 10px 22px -8px rgba(0,0,0,.4)}
-.photo-thumb{display:inline-block;background:var(--present);color:var(--present-tx);font-weight:700;padding:28px 26px;border-radius:14px;font-size:14px}
-.qtybox{display:flex;align-items:center;gap:6px;background:var(--card2);border:1px solid var(--border);border-radius:11px;padding:7px 12px;width:106px;flex:0 0 auto}
+.selrow{display:flex;align-items:center;gap:12px;padding:12px 0;font-size:14px;font-weight:600;cursor:pointer}
+.photo-circle{width:80px;height:80px;border-radius:50%;background:var(--p);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:28px;margin:8px auto 0;cursor:pointer}
+.photo-thumb{display:inline-block;background:var(--present);color:var(--present-tx);font-weight:700;padding:24px;border-radius:12px;font-size:13px}
+.qtybox{display:flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 12px;width:100px;flex:0 0 auto}
 .qtybox input{border:none;background:transparent;width:100%;font-size:14px;font-weight:700;color:var(--text);outline:none}
 .qtybox input::placeholder{color:var(--soft);font-weight:700}
-.qtybox span{font-size:12px;color:var(--soft);font-weight:600}
-.qtybox.dis{opacity:.55}
-.pickfield{width:100%;border:1px solid var(--border);background:#fff;border-radius:12px;padding:14px;font-size:14px;color:var(--text);display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.qtybox span{font-size:11px;color:var(--soft);font-weight:600}
+.qtybox.dis{opacity:.5}
+.pickfield{width:100%;border:1px solid var(--border);background:#fff;border-radius:10px;padding:12px 14px;font-size:14px;color:var(--text);display:flex;align-items:center;justify-content:space-between;cursor:pointer;line-height:1.4}
 .pickfield .ph{color:#aaa298}
-.chev2{color:var(--soft);font-size:16px}
-.addsite{width:100%;border:2px dashed var(--p);background:transparent;color:var(--p);font-weight:700;font-size:15px;border-radius:12px;padding:16px;cursor:pointer;font-family:var(--fs)}
-.pick-row{display:flex;align-items:center;gap:13px;padding:15px 4px;border-bottom:1px solid var(--border);font-size:15px;cursor:pointer}
+.chev2{color:var(--soft);font-size:14px}
+.addsite{width:100%;border:1.5px dashed var(--p);background:transparent;color:var(--p);font-weight:700;font-size:14px;border-radius:10px;padding:14px;cursor:pointer;font-family:var(--fs)}
+.pick-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);font-size:14px;cursor:pointer}
 .pick-row:last-child{border-bottom:none}
 .fadein{animation:fade .25s ease both}
 @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
@@ -480,23 +486,23 @@ function render(screen, opt){
 /* ---------- LOGIN ---------- */
 function tplLogin(){
   return `
-  <div style="text-align:center;margin-top:26px">
-    <div style="width:70px;height:70px;margin:0 auto;border-radius:20px;background:linear-gradient(135deg,var(--pd),var(--pl));
-      display:flex;align-items:center;justify-content:center;color:#fff;font-size:34px;font-weight:800;box-shadow:0 14px 26px -10px rgba(0,0,0,.5)">O</div>
-    <div style="font-size:23px;font-weight:800;margin-top:14px">ONAQT</div>
-    <div style="font-size:12.5px;color:var(--soft);margin-top:3px">Work Force Management System</div>
+  <div style="text-align:center;margin-top:24px">
+    <div style="width:64px;height:64px;margin:0 auto;border-radius:12px;background:var(--p);
+      display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px;font-weight:800">O</div>
+    <div style="font-size:20px;font-weight:800;margin-top:12px;letter-spacing:.2px">ONAQT</div>
+    <div style="font-size:12px;color:var(--soft);margin-top:4px">Work Force Management System</div>
   </div>
-  <div class="card mt20" style="padding:22px 18px">
-    <div style="font-size:21px;font-weight:800">Welcome back</div>
-    <div style="font-size:13px;color:var(--soft);margin-top:3px">Login to continue</div>
+  <div class="card mt24">
+    <div style="font-size:18px;font-weight:800">Welcome back</div>
+    <div style="font-size:13px;color:var(--soft);margin-top:4px">Login to continue</div>
     <div class="fgroup mt16"><input class="field" id="liUser" placeholder="Enter Username" value="jaspal"></div>
-    <div class="fgroup" style="margin-top:12px;position:relative">
-      <input class="field" id="liPass" type="password" placeholder="Enter Password" value="demo1234" style="padding-right:46px">
-      <span onclick="togglePass()" style="position:absolute;right:14px;top:13px;cursor:pointer;font-size:18px;color:var(--soft)">👁</span>
+    <div class="fgroup mt12" style="position:relative">
+      <input class="field" id="liPass" type="password" placeholder="Enter Password" value="demo1234" style="padding-right:44px">
+      <span onclick="togglePass()" style="position:absolute;right:12px;top:11px;cursor:pointer;font-size:16px;color:var(--soft)">👁</span>
     </div>
-    <div style="text-align:right;font-size:12px;color:var(--p);font-weight:700;margin-top:9px;cursor:pointer" onclick="toast('Password reset link sent (demo)')">Forgot your password?</div>
+    <div style="text-align:right;font-size:12px;color:var(--p);font-weight:700;margin-top:8px;cursor:pointer" onclick="toast('Password reset link sent (demo)')">Forgot your password?</div>
     <button class="btn mt16" onclick="doLogin()">Login</button>
-    <button class="btn ghost mt12" onclick="toast('OTP sent to registered mobile (demo)')">Login with OTP</button>
+    <button class="btn ghost mt8" onclick="toast('OTP sent to registered mobile (demo)')">Login with OTP</button>
   </div>`;
 }
 function togglePass(){ const p=document.getElementById('liPass'); p.type = p.type==='password'?'text':'password'; }
@@ -512,7 +518,7 @@ let tabIdx=0;
 function tplDashboard(){
   return `
   <div class="between">
-    <div style="font-size:21px;font-weight:800">${USER.name}</div>
+    <div style="font-size:20px;font-weight:800">${USER.name}</div>
     <span class="chip ok" style="cursor:pointer" onclick="openLeave()">Apply Leave</span>
   </div>
   <div class="locrow" onclick="captureLoc()">
@@ -801,7 +807,7 @@ function tplWork(){
   <div class="card list-cta" onclick="go('selfassign')">
     <span class="plus">+</span>
     <div class="grow"><div style="font-weight:800;font-size:14px;color:var(--p)">SELF WORK ASSIGN</div>
-      <div class="muted" style="font-size:12.5px">Create New Work Assignment</div></div>
+      <div class="muted" style="font-size:12px">Create New Work Assignment</div></div>
     <span class="muted" style="font-size:20px">›</span>
   </div>
   <div class="sectlabel">Assigned Work</div>
@@ -809,8 +815,8 @@ function tplWork(){
     <div class="card" style="padding:15px;cursor:pointer" onclick="go('workdetail',${i})">
       <div class="between"><span style="font-weight:800;font-size:16px">${w.id}</span>
         <span class="chip ${stgChip(w.stg)}">${stgLabel(w.stg)}</span></div>
-      <div class="mt10" style="font-size:13.5px"><span class="muted">Site ID:</span> <b>${w.site}</b></div>
-      <div class="mt6" style="font-size:13.5px"><span class="muted">Project:</span> <b>${w.project}</b></div>
+      <div class="mt10" style="font-size:13px"><span class="muted">Site ID:</span> <b>${w.site}</b></div>
+      <div class="mt6" style="font-size:13px"><span class="muted">Project:</span> <b>${w.project}</b></div>
       <div class="mt10" style="display:flex;gap:7px;flex-wrap:wrap;align-items:center">
         <span class="muted" style="font-size:13px">Types:</span>
         ${w.types.map(t=>`<span class="chip neutral">${t}</span>`).join('')}
@@ -828,9 +834,9 @@ function tplWorkDetail(i){
     typesHtml = `
       <label class="selrow" onclick="toggleAllTypes(${i})"><span class="cbx ${allOn?'on':''}">${allOn?'✓':''}</span> Select All</label>
       ${w.types.map((t,ti)=>`
-        <div class="card" style="padding:14px;display:flex;align-items:center;gap:13px">
+        <div class="card" style="padding:12px;display:flex;align-items:center;gap:13px">
           <span class="cbx ${selectedTypes.has(ti)?'on':''}" onclick="toggleType(${i},${ti})">${selectedTypes.has(ti)?'✓':''}</span>
-          <div class="grow"><div style="font-weight:700">${t}</div><div class="muted" style="font-size:12.5px;margin-top:3px">${fmt(w.date)}</div></div>
+          <div class="grow"><div style="font-weight:700">${t}</div><div class="muted" style="font-size:12px;margin-top:4px">${fmt(w.date)}</div></div>
           <span class="chip warn">Pending</span>
         </div>`).join('')}`;
   } else {
@@ -838,7 +844,7 @@ function tplWorkDetail(i){
                  : w.stg==='accepted'?'<span class="chip info">Accepted</span>'
                  : '<span class="chip warn">Pending</span>';
     typesHtml = w.types.map(t=>`<div class="card between" style="padding:15px">
-      <div><div style="font-weight:700">${t}</div><div class="muted" style="font-size:12.5px;margin-top:3px">${fmt(w.date)}</div></div>
+      <div><div style="font-weight:700">${t}</div><div class="muted" style="font-size:12px;margin-top:4px">${fmt(w.date)}</div></div>
       ${tBadge}</div>`).join('');
   }
   let action;
@@ -852,8 +858,8 @@ function tplWorkDetail(i){
   <div class="card mt16">
     <div class="between"><span style="font-weight:800;color:var(--p);font-size:15px">Site Information</span>${badge}</div>
     <div class="row mt12">
-      <div class="kpi" style="background:var(--card2)"><div class="label">Project</div><div style="font-weight:700;margin-top:3px">${w.project}</div></div>
-      <div class="kpi" style="background:var(--card2)"><div class="label">Circle</div><div style="font-weight:700;margin-top:3px">${w.circle}</div></div>
+      <div class="kpi" style="background:var(--card2)"><div class="label">Project</div><div style="font-weight:700;margin-top:4px">${w.project}</div></div>
+      <div class="kpi" style="background:var(--card2)"><div class="label">Circle</div><div style="font-weight:700;margin-top:4px">${w.circle}</div></div>
     </div>
   </div>
   <div class="sectlabel">Work Types</div>
@@ -873,7 +879,7 @@ function startWorkBody(){
     ? `<div style="text-align:center"><div class="photo-thumb">✓&nbsp; Photo captured</div></div>
        <div class="card mt16" style="background:var(--card2);display:flex;gap:11px;align-items:flex-start">
          <span style="color:var(--p);font-size:18px">📍</span>
-         <div><div class="label">Location</div><div style="font-weight:700;margin-top:3px">30.753485, 76.7418167</div></div></div>`
+         <div><div class="label">Location</div><div style="font-weight:700;margin-top:4px">30.753485, 76.7418167</div></div></div>`
     : `<div style="text-align:center;padding:6px 0 2px">
          <div class="photo-circle" onclick="capturePhoto()">📷</div>
          <div class="muted mt12" style="font-size:13px">Tap to take photo</div></div>`;
@@ -897,7 +903,7 @@ function endWorkBody(){
   const opt=(v)=>`<label class="selrow" onclick="setEndStatus('${v}')"><span class="cbx ${flowCtx.status===v?'on':''}">${flowCtx.status===v?'✓':''}</span> ${v}</label>`;
   return `<div class="card" style="background:var(--card2);display:flex;gap:11px;align-items:flex-start">
       <span style="color:var(--p);font-size:18px">📍</span>
-      <div><div class="label">Work Location</div><div style="font-weight:700;margin-top:3px">30.753485, 76.7418167</div></div></div>
+      <div><div class="label">Work Location</div><div style="font-weight:700;margin-top:4px">30.753485, 76.7418167</div></div></div>
     <textarea class="field mt12" placeholder="Enter Remarks"></textarea>
     <div class="label mt16" style="margin-bottom:4px">Select Status</div>
     ${opt('COMPLETED')}${opt('PENDING')}
@@ -913,8 +919,8 @@ function tplMaterial(){
   const list = MATERIALS.map((m,i)=>{
     const out = m.avail===0;
     const sub = out?'<span class="chip oos">Out of stock</span>'
-                   :`<span class="muted" style="font-size:12.5px">Available: ${m.avail} ${m.unit}</span>`;
-    return `<div class="card" style="padding:14px;display:flex;align-items:center;gap:12px" data-name="${(m.name+' '+m.unit).toLowerCase()}">
+                   :`<span class="muted" style="font-size:12px">Available: ${m.avail} ${m.unit}</span>`;
+    return `<div class="card" style="padding:12px;display:flex;align-items:center;gap:12px" data-name="${(m.name+' '+m.unit).toLowerCase()}">
       <div class="grow"><div style="font-weight:700">${m.name}</div><div class="mt6">${sub}</div></div>
       <div class="qtybox ${out?'dis':''}">
         <input ${out?'disabled':''} value="${matQty[i]||''}" inputmode="decimal" placeholder="Qty" oninput="setMatQty(${i},this.value)">
@@ -923,7 +929,7 @@ function tplMaterial(){
   }).join('');
   return `
   <input class="field" placeholder="🔍  Search by name or unit" value="${matSearch}" oninput="filterMat(this.value)">
-  <div class="muted mt12" style="font-size:12.5px">${MATERIALS.length} materials</div>
+  <div class="muted mt12" style="font-size:12px">${MATERIALS.length} materials</div>
   <div id="matList" class="mt8">${list}</div>
   <div class="actionbar">
     <div class="between" style="font-size:13px;margin-bottom:10px"><span><b id="matCount">0</b> materials added</span><span class="muted">Total: <b id="matTotal">0</b></span></div>
@@ -968,7 +974,7 @@ function tplReimb(){
   <div class="card list-cta" onclick="startCreateClaim()">
     <span class="plus">+</span>
     <div class="grow"><div style="font-weight:800;font-size:14px;color:var(--p)">CREATE CLAIM</div>
-      <div class="muted" style="font-size:12.5px">Submit New Reimbursement Claim</div></div>
+      <div class="muted" style="font-size:12px">Submit New Reimbursement Claim</div></div>
     <span class="muted" style="font-size:20px">›</span>
   </div>
   <div class="sectlabel">Submitted Claims</div>
@@ -978,7 +984,7 @@ function tplReimb(){
       <div class="between"><span style="font-weight:700;font-size:13px">${c.id}</span><span class="muted" style="font-size:18px">›</span></div>
       <div class="row mt8" style="align-items:center;gap:8px;flex-wrap:wrap">
         <span class="chip info">${c.status}</span>
-        <span class="muted" style="font-size:12.5px">📅 ${fmt(c.date)}</span>
+        <span class="muted" style="font-size:12px">📅 ${fmt(c.date)}</span>
         <span class="chip neutral" style="margin-left:auto">${c.type}</span>
       </div>
       <div class="row mt12">
@@ -987,7 +993,7 @@ function tplReimb(){
           <div class="label" style="${c.approved!=null?'color:var(--present-tx)':''}">Approved</div>
           <div class="amt" style="margin-top:2px;${c.approved!=null?'color:var(--present-tx)':'color:var(--neutral-tx);font-size:14px'}">${c.approved!=null?'₹'+money(c.approved):'Pending'}</div></div>
       </div>
-      <div class="between mt12" style="font-size:12.5px;border-top:1px solid var(--border);padding-top:10px">
+      <div class="between mt12" style="font-size:12px;border-top:1px solid var(--border);padding-top:10px">
         <span class="muted">Sites <b style="color:var(--text)">${c.sitesData.length}</b></span>
         <span class="muted">Expenses <b style="color:var(--text)">${exp}</b></span>
         <span class="muted">Type <b style="color:var(--text)">${c.multi?'Multiple Site':(c.type==='Local'?'Single Site':c.type)}</b></span>
@@ -1004,19 +1010,19 @@ function tplClaimDetail(i){
   <div style="text-align:right"><span class="chip info">${c.status}</span></div>
   <div class="card mt12">
     <div class="row">
-      <div class="kpi" style="background:var(--card2)"><div class="label">Claim Amount</div><div class="amt" style="margin-top:3px">₹${money(total)}</div></div>
-      <div class="kpi" style="background:${c.approved!=null?'var(--present)':'var(--card2)'}"><div class="label" style="${c.approved!=null?'color:var(--present-tx)':''}">Approved Amount</div><div class="amt" style="margin-top:3px;${c.approved!=null?'color:var(--present-tx)':'color:var(--neutral-tx)'}">${c.approved!=null?'₹'+money(c.approved):'Pending'}</div></div>
+      <div class="kpi" style="background:var(--card2)"><div class="label">Claim Amount</div><div class="amt" style="margin-top:4px">₹${money(total)}</div></div>
+      <div class="kpi" style="background:${c.approved!=null?'var(--present)':'var(--card2)'}"><div class="label" style="${c.approved!=null?'color:var(--present-tx)':''}">Approved Amount</div><div class="amt" style="margin-top:4px;${c.approved!=null?'color:var(--present-tx)':'color:var(--neutral-tx)'}">${c.approved!=null?'₹'+money(c.approved):'Pending'}</div></div>
     </div>
   </div>
   <div class="card mt12">
     <div style="font-weight:800;font-size:15px">📄 Basic Information</div>
     <div class="row mt12">
-      <div class="grow"><div class="label">Date</div><div style="font-weight:700;margin-top:3px">${c.date}</div></div>
-      <div class="grow"><div class="label">Category</div><div style="font-weight:700;margin-top:3px">${c.type}</div></div>
+      <div class="grow"><div class="label">Date</div><div style="font-weight:700;margin-top:4px">${c.date}</div></div>
+      <div class="grow"><div class="label">Category</div><div style="font-weight:700;margin-top:4px">${c.type}</div></div>
     </div>
     <div class="row mt12">
-      <div class="grow"><div class="label">Purpose</div><div style="font-weight:700;margin-top:3px">${c.purpose||'—'}</div></div>
-      <div class="grow"><div class="label">Remarks</div><div style="font-weight:700;margin-top:3px">${c.remarks||'—'}</div></div>
+      <div class="grow"><div class="label">Purpose</div><div style="font-weight:700;margin-top:4px">${c.purpose||'—'}</div></div>
+      <div class="grow"><div class="label">Remarks</div><div style="font-weight:700;margin-top:4px">${c.remarks||'—'}</div></div>
     </div>
   </div>
   <div class="card mt12">
@@ -1033,7 +1039,7 @@ function tplClaimDetail(i){
             <span class="chev ${open?'up':''}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--soft)" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span></span></div>
         ${open ? `<div style="padding:0 12px 12px">${s.items.map(it=>`
           <div class="expense-line"><span style="display:flex;gap:10px"><i class="dot" style="margin-top:6px"></i>
-            <span><div style="font-weight:600">${it.label}</div><div class="muted" style="font-size:11.5px">of ₹${money(it.amt)}</div></span></span>
+            <span><div style="font-weight:600">${it.label}</div><div class="muted" style="font-size:12px">of ₹${money(it.amt)}</div></span></span>
           <b>₹${money(it.amt)}</b></div>`).join('')}</div>` : ''}
       </div>`;}).join('')}
   </div>`;
@@ -1120,7 +1126,7 @@ function removeSite(k){ draft.sites.splice(k,1); go('createclaim'); }
 
 /* ---- receipt card (shared) ---- */
 function receiptCard(){ return `<div class="card mt12 between" style="background:var(--card2)">
-  <div><div style="font-weight:700;font-size:13.5px">Attach Receipt</div><div class="muted" style="font-size:11.5px;margin-top:2px">Upload receipt for reimbursement claim</div></div>
+  <div><div style="font-weight:700;font-size:13px">Attach Receipt</div><div class="muted" style="font-size:12px;margin-top:2px">Upload receipt for reimbursement claim</div></div>
   <button class="btn sm" style="width:auto" onclick="toast('File picker (demo)')">⬆ Upload</button></div>`; }
 
 /* ---- Add Travel Entry (full page) ---- */
@@ -1208,7 +1214,7 @@ function tplLeave(){
   <div class="fgroup">
     <div class="label" style="margin-bottom:8px">Attachment (Optional)</div>
     <div class="field" style="display:flex;align-items:center;gap:11px;cursor:pointer" onclick="toast('File picker (demo)')"><span style="color:var(--p);font-size:18px">📎</span><span class="muted">No file selected</span></div>
-    <div class="muted" style="font-size:11.5px;margin-top:7px">Supported: PDF, JPG, PNG (Max 5MB)</div>
+    <div class="muted" style="font-size:12px;margin-top:8px">Supported: PDF, JPG, PNG (Max 5MB)</div>
   </div>
   <button class="btn mt20" onclick="submitLeave()">Submit Leave Request</button>`;
 }
