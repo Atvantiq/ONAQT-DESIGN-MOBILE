@@ -279,13 +279,13 @@ textarea.field{resize:none;min-height:88px}
   <div class="drawer" id="drawer">
     <div class="head">
       <div class="logo">O</div>
-      <div class="uname" id="drawerName">Jaspal Singh</div>
-      <div class="umail" id="drawerMail">jaspal@onaqt.dev</div>
+      <div class="uname" id="drawerName">Andrew Phillips</div>
+      <div class="umail" id="drawerMail">andrew.phillips@onaqt.com</div>
     </div>
     <div class="nav">
       <div class="dnav" data-screen="dashboard" onclick="go('dashboard')"><span class="di">▦</span><span class="dlabel">Dashboard</span></div>
       <div class="dnav" data-screen="work" onclick="go('work')"><span class="di">🧰</span><span class="dlabel">Work Management</span></div>
-      <div class="dnav" data-screen="reimb" onclick="go('reimb')"><span class="di">₹</span><span class="dlabel">Reimbursement</span></div>
+      <div class="dnav" data-screen="reimb" onclick="go('reimb')"><span class="di">$</span><span class="dlabel">Reimbursement</span></div>
       <div class="dnav" onclick="closeDrawer();openTheme()"><span class="di">🎨</span><span class="dlabel">Theme</span></div>
       <div class="dnav" onclick="logout()"><span class="di">⎋</span><span class="dlabel">Logout</span></div>
     </div>
@@ -312,13 +312,13 @@ textarea.field{resize:none;min-height:88px}
 
 <script>
 /* =====================  SEED DATA  ===================== */
-const USER = { name:'Jaspal Singh', email:'jaspal@onaqt.dev', circle:'CHD',
-  doj:'2026-05-01', manager:'Rajeev Kumar', designation:'IT Engineer' };
+const USER = { name:'Andrew Phillips', email:'andrew.phillips@onaqt.com', circle:'Dallas',
+  doj:'2026-05-01', manager:'Victor Stevens', designation:'RF Engineer' };
 
 const myTargets = {
   period:'May 2026',
   lob:'Field Services',
-  project:'jio_4g',
+  project:'AT&T 5G',
   level:'L2 Engineer',
   revenue:{ target:450000, achieved:382000 },
   sites:{ target:8, done:5 },
@@ -328,48 +328,48 @@ const myTargets = {
   avgDaysPerSite:1.4
 };
 const myProjects = [
-  { id:'jio_4g',    name:'Jio 4G Expansion',  client:'Jio',           circle:'Chandigarh',
+  { id:'att_5g',     name:'AT&T 5G Rollout',     client:'AT&T Networks', circle:'Texas',
     sites:{target:5, done:3}, revenue:{target:250000, achieved:220000}, hours:{plan:96, actual:92} },
-  { id:'airtel_5g', name:'Airtel 5G Rollout', client:'Airtel',        circle:'Mohali',
+  { id:'lumen_bh',   name:'Lumen Backhaul',      client:'Lumen Inc',     circle:'California',
     sites:{target:2, done:2}, revenue:{target:130000, achieved:142000}, hours:{plan:48, actual:46} },
-  { id:'vi_fiber',  name:'Vi Fiber Upgrade',  client:'Vodafone Idea', circle:'Panchkula',
+  { id:'verizon_fb', name:'Verizon Fiber Upgrade', client:'Verizon',     circle:'New York',
     sites:{target:1, done:0}, revenue:{target:70000,  achieved:20000},  hours:{plan:32, actual:30} }
 ];
-function _inrAbs(n){ const a=Math.abs(n); if(a>=10000000) return (a/10000000).toFixed(2).replace(/\.?0+$/,'')+'Cr'; if(a>=100000) return (a/100000).toFixed(2).replace(/\.?0+$/,'')+'L'; if(a>=1000) return (a/1000).toFixed(1).replace(/\.0$/,'')+'K'; return ''+a; }
-function inr(n){ return (n<0?'-':'')+'₹'+_inrAbs(n); }
-function inrFull(n){ return (n<0?'-':'')+'₹'+Math.abs(n).toLocaleString('en-IN'); }
+function _usdAbs(n){ const a=Math.abs(n); if(a>=1000000) return (a/1000000).toFixed(2).replace(/\.?0+$/,'')+'M'; if(a>=1000) return (a/1000).toFixed(1).replace(/\.0$/,'')+'K'; return ''+a; }
+function usd(n){ return (n<0?'-':'')+'$'+_usdAbs(n); }
+function usdFull(n){ return (n<0?'-':'')+'$'+Math.abs(n).toLocaleString('en-US'); }
 
-const SITES    = ['airtel-4g','JAS002','jio site','jio-3b1','jio-franco','jio-Shahi Majra','jio-sohana'];
+const SITES    = ['TX-001','TX-012','TX-030','CA-101','CA-203','NY-202','GA-045'];
 const PURPOSES = ['MRN','MIN','Billing'];
-const PROJECTS = ['jio_4g','airtel_5g','vi_fiber'];
-const CIRCLES  = ['Chandigarh','Mohali','Panchkula'];
-const CLIENTS  = ['Jio','Airtel','Vodafone Idea'];
+const PROJECTS = ['AT&T 5G','Lumen','Verizon Fiber'];
+const CIRCLES  = ['Texas','California','New York'];
+const CLIENTS  = ['AT&T Networks','Lumen Inc','Verizon'];
 const POS      = ['PO-2026-0012','PO-2026-0047','PO-2026-0119'];
 const WTYPES   = ['Installation','Site Survey','Antenna Replace','Maintenance'];
-const LTYPES   = ['Casual Leave','Sick Leave','Earned Leave','Comp Off'];
-const TMODES   = ['Cab / Taxi','Auto Rickshaw','Own Vehicle','Bike','Bus','Train','Flight','Metro'];
+const LTYPES   = ['Vacation','Sick Leave','Personal Day','Comp Time'];
+const TMODES   = ['Taxi / Uber','Rideshare','Personal Vehicle','Bus','Train','Flight','Subway'];
 
 let claims = [
   { id:'CLM-20260514-7045BDDC', status:'Approved by PM', date:'2026-05-14', type:'Local',
     purpose:'Billing', remarks:'Site visit conveyance',
-    sitesData:[{ site:'jio-3b1', items:[{cat:'Travel',label:'Travel · Cab',amt:500},{cat:'Travel',label:'Travel · Auto',amt:100},{cat:'DA',label:'Daily Allowance',amt:150}] }],
-    approved:750 },
+    sitesData:[{ site:'CA-101', items:[{cat:'Travel',label:'Travel · Taxi',amt:65},{cat:'Travel',label:'Travel · Rideshare',amt:22},{cat:'DA',label:'Per Diem',amt:75}] }],
+    approved:162 },
   { id:'CLM-20260514-D70CB261', status:'Submitted', date:'2026-05-14', type:'Local',
     purpose:'MRN', remarks:'',
-    sitesData:[{ site:'airtel_site', items:[{cat:'Travel',label:'Travel · Bike',amt:400},{cat:'DA',label:'Daily Allowance',amt:300}] }],
+    sitesData:[{ site:'TX-001', items:[{cat:'Travel',label:'Travel · Mileage',amt:48},{cat:'DA',label:'Per Diem',amt:75}] }],
     approved:null },
   { id:'CLM-20260501-3F1F1AF0', status:'Approved by ADMIN', date:'2026-05-01', type:'Local',
     purpose:'Billing', remarks:'Survey expenses',
-    sitesData:[{ site:'jio_site', items:[{cat:'Travel',label:'Travel · Bus',amt:200},{cat:'DA',label:'Daily Allowance',amt:100},{cat:'Others',label:'Stationery',amt:50}] }],
-    approved:350 }
+    sitesData:[{ site:'TX-030', items:[{cat:'Travel',label:'Travel · Bus',amt:18},{cat:'DA',label:'Per Diem',amt:75},{cat:'Others',label:'Stationery',amt:12}] }],
+    approved:105 }
 ];
 
 let works = [
-  { id:'airtel-4g', site:'airtel_site', project:'jio_4g', circle:'Chandigarh', stg:'pending',   types:['Installation'],               date:'2026-05-29' },
-  { id:'JAS002',    site:'JAS002',      project:'jio_4g', circle:'Chandigarh', stg:'completed', types:['Antenna Replace'],            date:'2026-05-20' },
-  { id:'jio-3b1',   site:'jio-3b1',     project:'jio_4g', circle:'Mohali',     stg:'pending',   types:['Installation','Site Survey'], date:'2026-05-28' },
-  { id:'jio site',  site:'jio_site',    project:'jio_4g', circle:'Chandigarh', stg:'pending',   types:['Installation','Site Survey'], date:'2026-05-27' },
-  { id:'jio-sohana',site:'jio-sohana',  project:'jio_4g', circle:'Mohali',     stg:'completed', types:['Installation'],               date:'2026-05-15' }
+  { id:'TX-001', site:'TX-001', project:'AT&T 5G',       circle:'Texas',      stg:'pending',   types:['Installation'],               date:'2026-05-29' },
+  { id:'NY-202', site:'NY-202', project:'Lumen',         circle:'New York',   stg:'completed', types:['Antenna Replace'],            date:'2026-05-20' },
+  { id:'CA-101', site:'CA-101', project:'AT&T 5G',       circle:'California', stg:'pending',   types:['Installation','Site Survey'], date:'2026-05-28' },
+  { id:'TX-030', site:'TX-030', project:'AT&T 5G',       circle:'Texas',      stg:'pending',   types:['Installation','Site Survey'], date:'2026-05-27' },
+  { id:'CA-203', site:'CA-203', project:'Verizon Fiber', circle:'California', stg:'completed', types:['Installation'],               date:'2026-05-15' }
 ];
 const MATERIALS = [
   { name:'Abc testing wire 10 m', avail:20, unit:'m' },
@@ -495,7 +495,7 @@ function tplLogin(){
   <div class="card mt24">
     <div style="font-size:18px;font-weight:800">Welcome back</div>
     <div style="font-size:13px;color:var(--soft);margin-top:4px">Login to continue</div>
-    <div class="fgroup mt16"><input class="field" id="liUser" placeholder="Enter Username" value="jaspal"></div>
+    <div class="fgroup mt16"><input class="field" id="liUser" placeholder="Enter Username" value="andrew.phillips"></div>
     <div class="fgroup mt12" style="position:relative">
       <input class="field" id="liPass" type="password" placeholder="Enter Password" value="demo1234" style="padding-right:44px">
       <span onclick="togglePass()" style="position:absolute;right:12px;top:11px;cursor:pointer;font-size:16px;color:var(--soft)">👁</span>
@@ -579,8 +579,8 @@ function tplPaneTargets(){
 
   <div class="card mt12">
     <div class="label">Revenue Target</div>
-    <div class="tgt-hero">${inr(t.revenue.achieved)}</div>
-    <div class="tgt-hero-sub">of ${inr(t.revenue.target)} target · <span class="${revVar>=0?'pos':'neg'}">${revVar>=0?'+':''}${inr(revVar)}</span></div>
+    <div class="tgt-hero">${usd(t.revenue.achieved)}</div>
+    <div class="tgt-hero-sub">of ${usd(t.revenue.target)} target · <span class="${revVar>=0?'pos':'neg'}">${revVar>=0?'+':''}${usd(revVar)}</span></div>
     <div class="tgt-bar mt12"><div class="tgt-bar-fill" style="width:${Math.min(100,revPct)}%"></div></div>
     <div class="between mt8" style="font-size:12px;color:var(--soft)">
       <span>${revPct}% achieved</span>
@@ -613,7 +613,7 @@ function tplPaneProjects(){
       <div class="pj-stats mt8">
         <span><b>${p.sites.done}/${p.sites.target}</b> sites</span>
         <span class="pj-sep">·</span>
-        <span><b>${inr(p.revenue.achieved)}</b> of ${inr(p.revenue.target)}</span>
+        <span><b>${usd(p.revenue.achieved)}</b> of ${usd(p.revenue.target)}</span>
       </div>
     </div>`;
   }).join('');
@@ -988,10 +988,10 @@ function tplReimb(){
         <span class="chip neutral" style="margin-left:auto">${c.type}</span>
       </div>
       <div class="row mt12">
-        <div class="kpi" style="background:var(--card2)"><div class="label">Claim Amount</div><div class="amt" style="margin-top:2px">₹${money(claimAmt)}</div></div>
+        <div class="kpi" style="background:var(--card2)"><div class="label">Claim Amount</div><div class="amt" style="margin-top:2px">$${money(claimAmt)}</div></div>
         <div class="kpi" style="background:${c.approved!=null?'var(--present)':'var(--card2)'}">
           <div class="label" style="${c.approved!=null?'color:var(--present-tx)':''}">Approved</div>
-          <div class="amt" style="margin-top:2px;${c.approved!=null?'color:var(--present-tx)':'color:var(--neutral-tx);font-size:14px'}">${c.approved!=null?'₹'+money(c.approved):'Pending'}</div></div>
+          <div class="amt" style="margin-top:2px;${c.approved!=null?'color:var(--present-tx)':'color:var(--neutral-tx);font-size:14px'}">${c.approved!=null?'$'+money(c.approved):'Pending'}</div></div>
       </div>
       <div class="between mt12" style="font-size:12px;border-top:1px solid var(--border);padding-top:10px">
         <span class="muted">Sites <b style="color:var(--text)">${c.sitesData.length}</b></span>
@@ -1010,8 +1010,8 @@ function tplClaimDetail(i){
   <div style="text-align:right"><span class="chip info">${c.status}</span></div>
   <div class="card mt12">
     <div class="row">
-      <div class="kpi" style="background:var(--card2)"><div class="label">Claim Amount</div><div class="amt" style="margin-top:4px">₹${money(total)}</div></div>
-      <div class="kpi" style="background:${c.approved!=null?'var(--present)':'var(--card2)'}"><div class="label" style="${c.approved!=null?'color:var(--present-tx)':''}">Approved Amount</div><div class="amt" style="margin-top:4px;${c.approved!=null?'color:var(--present-tx)':'color:var(--neutral-tx)'}">${c.approved!=null?'₹'+money(c.approved):'Pending'}</div></div>
+      <div class="kpi" style="background:var(--card2)"><div class="label">Claim Amount</div><div class="amt" style="margin-top:4px">$${money(total)}</div></div>
+      <div class="kpi" style="background:${c.approved!=null?'var(--present)':'var(--card2)'}"><div class="label" style="${c.approved!=null?'color:var(--present-tx)':''}">Approved Amount</div><div class="amt" style="margin-top:4px;${c.approved!=null?'color:var(--present-tx)':'color:var(--neutral-tx)'}">${c.approved!=null?'$'+money(c.approved):'Pending'}</div></div>
     </div>
   </div>
   <div class="card mt12">
@@ -1035,12 +1035,12 @@ function tplClaimDetail(i){
           <span style="display:flex;align-items:center;gap:11px">
             <span style="width:34px;height:34px;border-radius:50%;background:var(--pd);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700">${si+1}</span>
             <span><b>${s.site}</b><div class="muted" style="font-size:12px">${s.items.length} expense(s)</div></span></span>
-          <span style="display:flex;align-items:center;gap:12px"><span class="amt">₹${money(sTotal)}</span>
+          <span style="display:flex;align-items:center;gap:12px"><span class="amt">$${money(sTotal)}</span>
             <span class="chev ${open?'up':''}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--soft)" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span></span></div>
         ${open ? `<div style="padding:0 12px 12px">${s.items.map(it=>`
           <div class="expense-line"><span style="display:flex;gap:10px"><i class="dot" style="margin-top:6px"></i>
-            <span><div style="font-weight:600">${it.label}</div><div class="muted" style="font-size:12px">of ₹${money(it.amt)}</div></span></span>
-          <b>₹${money(it.amt)}</b></div>`).join('')}</div>` : ''}
+            <span><div style="font-weight:600">${it.label}</div><div class="muted" style="font-size:12px">of $${money(it.amt)}</div></span></span>
+          <b>$${money(it.amt)}</b></div>`).join('')}</div>` : ''}
       </div>`;}).join('')}
   </div>`;
 }
@@ -1089,7 +1089,7 @@ function tplCreateClaim(){
 
   <div class="card"><div class="label">Remarks</div><textarea class="field mt8" onchange="draft.remarks=this.value" placeholder="Enter Remarks">${draft.remarks||''}</textarea></div>
 
-  <div class="card between" style="background:var(--pd);color:#fff"><span style="font-weight:700">Claim Total</span><span class="amt" id="ccTotal">₹0.00</span></div>
+  <div class="card between" style="background:var(--pd);color:#fff"><span style="font-weight:700">Claim Total</span><span class="amt" id="ccTotal">$0.00</span></div>
 
   <div class="row mt16">
     <button class="btn danger grow" onclick="go('reimb')">Cancel</button>
@@ -1175,11 +1175,11 @@ function renderDraftLists(){
     const rows=draft.items.map((it,idx)=>({it,idx})).filter(o=>o.it.cat===cat);
     el.innerHTML = rows.map(o=>{
       const sub = o.it.cat==='Travel' && (o.it.from||o.it.to) ? `<div class="muted" style="font-size:11px">${o.it.from||'—'} → ${o.it.to||'—'}</div>` : '';
-      return `<div class="added-item"><span>${o.it.label}${sub}</span><span><b>₹${money(o.it.amt)}</b> <span class="x" onclick="removeItem(${o.idx})">×</span></span></div>`;
+      return `<div class="added-item"><span>${o.it.label}${sub}</span><span><b>$${money(o.it.amt)}</b> <span class="x" onclick="removeItem(${o.idx})">×</span></span></div>`;
     }).join('');
   }
   const total=draft.items.reduce((a,it)=>a+it.amt,0);
-  const t=document.getElementById('ccTotal'); if(t) t.textContent='₹'+money(total);
+  const t=document.getElementById('ccTotal'); if(t) t.textContent='$'+money(total);
 }
 function submitClaim(){
   const dt=draft.date||'2026-05-30';
@@ -1243,7 +1243,7 @@ function pickTheme(k){ state.theme=k; applyTheme(); renderSheet(); }
 function pickMode(m){ state.mode=m; applyTheme(); renderSheet(); }
 
 /* ---------- helpers ---------- */
-function money(n){ return Number(n).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function money(n){ return Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
 function val(id){ const e=document.getElementById(id); return e?e.value:''; }
 function opts(arr,sel){ return arr.map(x=>`<option ${x===sel?'selected':''}>${x}</option>`).join(''); }
 function stgLabel(s){ return {pending:'Pending',accepted:'Accepted',inprogress:'In Progress',completed:'Completed'}[s]||s; }
@@ -1255,7 +1255,7 @@ function openFlowSheet(title, body){
   document.getElementById('scrim').classList.add('show');
 }
 function fmt(d){ const m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const x=new Date(d); return x.getDate()+' '+m[x.getMonth()]+' '+x.getFullYear(); }
+  const x=new Date(d); return m[x.getMonth()]+' '+x.getDate()+', '+x.getFullYear(); }
 
 /* ---------- boot ---------- */
 applyTheme();
