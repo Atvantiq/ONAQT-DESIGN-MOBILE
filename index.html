@@ -56,9 +56,12 @@ body::before{content:"";position:fixed;inset:0;background:
 .appbar{display:flex;align-items:center;justify-content:space-between;padding:8px 16px 16px;
   background:var(--p);color:#fff;flex:0 0 auto;transition:background .3s}
 .appbar .left{display:flex;align-items:center;gap:12px}
+.appbar .right{display:flex;align-items:center;gap:4px}
 .appbar h1{font-size:18px;font-weight:700;letter-spacing:0}
-.appbar .ic{width:24px;height:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;line-height:1}
+.appbar .ic{width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;line-height:1;border-radius:50%;position:relative}
+.appbar .ic:hover{background:rgba(255,255,255,.1)}
 .appbar .ic svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2}
+.appbar .bell-badge{position:absolute;top:4px;right:4px;background:var(--absent);color:#fff;font-size:9px;font-weight:800;border-radius:8px;min-width:14px;height:14px;padding:0 3px;display:flex;align-items:center;justify-content:center;line-height:1;border:1.5px solid var(--p)}
 .back{font-size:22px;cursor:pointer;line-height:1}
 
 .view{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
@@ -133,9 +136,11 @@ textarea.field{resize:none;min-height:88px}
 .drawer .umail{font-size:12px;opacity:.8;margin-top:2px}
 .drawer .nav{padding:8px 0;flex:1}
 .dnav{display:flex;align-items:center;gap:14px;padding:12px 16px;font-size:14px;font-weight:600;color:var(--text);cursor:pointer}
-.dnav .di{width:24px;display:flex;justify-content:center;font-size:18px}
+.dnav .di{width:22px;height:22px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;color:var(--soft)}
+.dnav .di svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .dnav.active{background:var(--card2)}
 .dnav.active .dlabel{color:var(--p)}
+.dnav.active .di{color:var(--p)}
 
 /* bottom sheet */
 .sheet{position:absolute;left:0;right:0;bottom:0;background:var(--card);border-radius:16px 16px 0 0;z-index:45;
@@ -156,8 +161,8 @@ textarea.field{resize:none;min-height:88px}
 .slider{position:relative;height:56px;border-radius:12px;background:var(--p);
   display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;overflow:hidden;user-select:none;letter-spacing:.2px}
 .slider .knob{position:absolute;left:4px;top:4px;width:48px;height:48px;border-radius:9px;background:#fff;color:var(--p);
-  display:flex;align-items:center;justify-content:center;font-size:20px;
-  cursor:grab;touch-action:none;z-index:2;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+  display:flex;align-items:center;justify-content:center;cursor:grab;touch-action:none;z-index:2;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.slider .knob svg{stroke:currentColor}
 .slider.done{background:linear-gradient(120deg,#5a4a1f,#b59038)}
 
 /* calendar */
@@ -183,6 +188,7 @@ textarea.field{resize:none;min-height:88px}
 .list-cta{display:flex;align-items:center;gap:12px;cursor:pointer}
 .list-cta .plus{width:36px;height:36px;border-radius:10px;background:var(--present);color:var(--p);display:flex;
   align-items:center;justify-content:center;font-size:20px;flex:0 0 auto}
+.list-cta .plus svg{stroke:currentColor}
 .amt{font-weight:800;font-size:16px;letter-spacing:.1px}
 .kpi{flex:1;border-radius:10px;padding:12px}
 .tgt-hero{font-size:28px;font-weight:800;margin-top:8px;letter-spacing:-.02em;color:var(--text);line-height:1.1}
@@ -219,7 +225,8 @@ textarea.field{resize:none;min-height:88px}
 
 .empty{text-align:center;color:var(--soft);padding:32px 16px;font-size:14px}
 .locrow{display:flex;align-items:center;gap:12px;margin-top:12px;cursor:pointer}
-.locicon{width:32px;height:32px;border-radius:50%;background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;flex:0 0 auto}
+.locicon{width:32px;height:32px;border-radius:50%;background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.locicon svg{stroke:currentColor}
 .locrow #locText{color:var(--soft);font-size:13px}
 .locrow #locText.capd{color:var(--present-tx);font-weight:600}
 .facts .fact{box-shadow:none;border:1px solid var(--border)}
@@ -227,13 +234,95 @@ textarea.field{resize:none;min-height:88px}
 .hidden{display:none!important}
 .btn.redbtn{background:var(--absent)}
 .btn.redbtn:hover{background:#a8463e}
+
+/* Attendance detail */
+.ad-card{padding:0;overflow:hidden}
+.ad-hours-block{text-align:center;padding:20px 16px 16px}
+.ad-hours-block .label{display:block;margin-bottom:8px}
+.ad-clock{font-size:32px;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums;line-height:1;letter-spacing:1px}
+.ad-clock .ad-colon{margin:0 6px;color:var(--soft)}
+.ad-clock-sub{font-size:10px;color:var(--soft);font-weight:700;margin-top:6px;letter-spacing:1px}
+.ad-row{display:flex;padding:14px 16px;gap:12px;border-top:1px solid var(--border)}
+.ad-row>div{flex:1;min-width:0}
+.ad-row .label{display:block;margin-bottom:4px}
+.ad-val{font-size:13px;font-weight:600;color:var(--text);line-height:1.4;letter-spacing:.1px}
+.ad-val.muted{color:var(--soft);font-weight:500}
+.ad-val.ad-addr{font-size:12px}
+.ad-inner{background:var(--card2);border-radius:10px;padding:12px;flex:1;min-width:0}
+.ad-inner .label{display:block;margin-bottom:4px;font-size:9px}
+.ad-inner-val{font-size:14px;font-weight:700;letter-spacing:.1px}
+
+/* Inbox */
+.notif{display:flex;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);position:relative;cursor:pointer;transition:background .15s}
+.notif:last-child{border-bottom:none}
+.notif:hover{background:var(--card2)}
+.notif.unread{background:rgba(45,90,61,.04)}
+.notif.unread::after{content:'';position:absolute;right:14px;top:18px;width:6px;height:6px;border-radius:50%;background:var(--p)}
+.notif-ic{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.notif-ic svg{stroke-width:2}
+.notif-ic.success{background:var(--present);color:var(--present-tx)}
+.notif-ic.info{background:var(--info);color:var(--info-tx)}
+.notif-ic.warn{background:var(--warn-bg);color:var(--warn-tx)}
+.notif-body{flex:1;min-width:0;padding-right:14px}
+.notif-title{font-size:14px;font-weight:700;color:var(--text);letter-spacing:.1px}
+.notif-body p{font-size:12px;color:var(--soft);margin:4px 0 0;line-height:1.45}
+.notif-time{font-size:11px;color:var(--soft);margin-top:6px;font-weight:600}
+.notif.read .notif-title{font-weight:600;color:var(--soft)}
+
+/* drawer head CTA */
+.drawer .head{position:relative}
+.drawer .head-cta{font-size:11px;font-weight:700;color:#fff;opacity:.75;margin-top:10px;letter-spacing:.3px}
+
+/* Profile */
+.pr-hero{background:var(--card);border-radius:12px;padding:20px 16px;text-align:center;border:1px solid var(--border);box-shadow:var(--shadow)}
+.pr-avatar{width:72px;height:72px;border-radius:50%;background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;margin:0 auto;letter-spacing:1px}
+.pr-name{font-size:18px;font-weight:800;margin-top:12px;letter-spacing:.1px}
+.pr-sub{font-size:12px;color:var(--soft);margin-top:4px}
+.pr-eid{font-size:11px;color:var(--soft);margin-top:10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.5px;background:var(--card2);display:inline-block;padding:4px 10px;border-radius:6px;font-weight:600}
+.pr-section{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--soft);font-weight:700;margin:20px 0 8px;padding-left:4px}
+.pr-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-top:1px solid var(--border);gap:12px}
+.pr-row:first-child{border-top:none;padding-top:0}
+.pr-row:last-child{padding-bottom:0}
+.pr-label{color:var(--soft);font-size:13px;font-weight:600;flex:0 0 auto}
+.pr-val{font-size:13px;font-weight:600;color:var(--text);text-align:right;min-width:0;letter-spacing:.1px;word-break:break-word}
+.pr-note{text-align:center;margin-top:20px;font-size:12px;color:var(--soft);padding:0 8px;line-height:1.5}
+
+/* Suggestion submissions */
+.sugg-row{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border)}
+.sugg-row:last-child{border-bottom:none}
+.sugg-subj{font-size:14px;font-weight:700;color:var(--text);line-height:1.3;letter-spacing:.1px}
+.sugg-meta{font-size:12px;color:var(--soft);margin-top:4px}
+.sugg-time{font-size:11px;color:var(--soft);margin-top:4px;font-weight:600}
+
+/* Search bar */
+.search-wrap{display:flex;align-items:center;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:0 12px;height:44px;box-shadow:var(--shadow);transition:border-color .15s,box-shadow .15s}
+.search-wrap:focus-within{border-color:var(--p);box-shadow:0 0 0 3px rgba(45,90,61,.08)}
+.search-ic{font-size:13px;color:var(--soft);margin-right:8px;flex:0 0 auto}
+.search-input{flex:1;border:none;background:transparent;outline:none;font-size:14px;color:var(--text);font-family:var(--fs);min-width:0;height:100%}
+.search-input::placeholder{color:#aaa298}
+.search-clear{width:22px;height:22px;border-radius:50%;background:var(--card2);color:var(--soft);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;font-weight:600;flex:0 0 auto;line-height:1}
+
+/* Filter chips row */
+.fchips{display:flex;gap:6px;overflow-x:auto;-ms-overflow-style:none;scrollbar-width:none;padding:2px 0}
+.fchips::-webkit-scrollbar{display:none}
+.fchip{flex:0 0 auto;font-size:12px;font-weight:700;padding:7px 14px;border-radius:999px;background:var(--card);color:var(--soft);cursor:pointer;border:1px solid var(--border);letter-spacing:.1px;transition:all .15s;white-space:nowrap;user-select:none}
+.fchip:hover{border-color:var(--soft)}
+.fchip.on{background:var(--p);color:#fff;border-color:var(--p)}
+
+/* Pull-to-refresh */
+.ptr{height:0;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:8px;color:var(--soft);font-size:12px;font-weight:600;opacity:0;transition:opacity .15s,height .25s ease-out;margin:0 -16px 0}
+.ptr-spin{display:inline-flex;align-items:center;line-height:1;color:var(--soft)}
+.ptr-spin svg{stroke:currentColor}
+.ptr.spinning .ptr-spin{animation:ptrspin .8s linear infinite}
+@keyframes ptrspin{to{transform:rotate(360deg)}}
 .actionbar{position:sticky;bottom:0;background:linear-gradient(transparent,var(--bg) 32%);padding:16px 0 0;margin-top:16px}
 .chip.oos{background:#f6dede;color:#b34a42}
 .cbx{width:22px;height:22px;border-radius:6px;border:1.6px solid var(--p);display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px;flex:0 0 auto;cursor:pointer;background:transparent}
 .cbx.on{background:var(--p)}
 .selrow{display:flex;align-items:center;gap:12px;padding:12px 0;font-size:14px;font-weight:600;cursor:pointer}
 .photo-circle{width:80px;height:80px;border-radius:50%;background:var(--p);color:#fff;
-  display:flex;align-items:center;justify-content:center;font-size:28px;margin:8px auto 0;cursor:pointer}
+  display:flex;align-items:center;justify-content:center;margin:8px auto 0;cursor:pointer}
+.photo-circle svg{stroke:currentColor;width:32px;height:32px}
 .photo-thumb{display:inline-block;background:var(--present);color:var(--present-tx);font-weight:700;padding:24px;border-radius:12px;font-size:13px}
 .qtybox{display:flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 12px;width:100px;flex:0 0 auto}
 .qtybox input{border:none;background:transparent;width:100%;font-size:14px;font-weight:700;color:var(--text);outline:none}
@@ -266,9 +355,15 @@ textarea.field{resize:none;min-height:88px}
       <span class="ic" id="navIcon" onclick="appNavIconClick()"></span>
       <h1 id="appTitle">Dashboard</h1>
     </div>
-    <span class="ic" onclick="openTheme()" title="Theme">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="8.5" cy="9" r="1.2" fill="#fff" stroke="none"/><circle cx="15.5" cy="9" r="1.2" fill="#fff" stroke="none"/><circle cx="9" cy="15" r="1.2" fill="#fff" stroke="none"/></svg>
-    </span>
+    <div class="right">
+      <span class="ic bell" onclick="go('inbox')" title="Notifications">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M18 16v-5a6 6 0 0 0-4-5.66V5a2 2 0 0 0-4 0v.34A6 6 0 0 0 6 11v5l-1.5 2h15z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg>
+        <span class="bell-badge" id="bellBadge" style="display:none">0</span>
+      </span>
+      <span class="ic" onclick="openTheme()" title="Theme">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="8.5" cy="9" r="1.2" fill="#fff" stroke="none"/><circle cx="15.5" cy="9" r="1.2" fill="#fff" stroke="none"/><circle cx="9" cy="15" r="1.2" fill="#fff" stroke="none"/></svg>
+      </span>
+    </div>
   </div>
 
   <!-- main view -->
@@ -277,17 +372,45 @@ textarea.field{resize:none;min-height:88px}
   <!-- drawer -->
   <div class="scrim" id="scrim" onclick="closeDrawer();closeSheet()"></div>
   <div class="drawer" id="drawer">
-    <div class="head">
+    <div class="head" onclick="go('profile')" style="cursor:pointer">
       <div class="logo">O</div>
       <div class="uname" id="drawerName">Andrew Phillips</div>
       <div class="umail" id="drawerMail">andrew.phillips@onaqt.com</div>
+      <div class="head-cta">View Profile ›</div>
     </div>
     <div class="nav">
-      <div class="dnav" data-screen="dashboard" onclick="go('dashboard')"><span class="di">▦</span><span class="dlabel">Dashboard</span></div>
-      <div class="dnav" data-screen="work" onclick="go('work')"><span class="di">🧰</span><span class="dlabel">Work Management</span></div>
-      <div class="dnav" data-screen="reimb" onclick="go('reimb')"><span class="di">$</span><span class="dlabel">Reimbursement</span></div>
-      <div class="dnav" onclick="closeDrawer();openTheme()"><span class="di">🎨</span><span class="dlabel">Theme</span></div>
-      <div class="dnav" onclick="logout()"><span class="di">⎋</span><span class="dlabel">Logout</span></div>
+      <div class="dnav" data-screen="dashboard" onclick="go('dashboard')">
+        <span class="di"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
+        <span class="dlabel">Dashboard</span>
+      </div>
+      <div class="dnav" data-screen="profile" onclick="go('profile')">
+        <span class="di"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg></span>
+        <span class="dlabel">My Profile</span>
+      </div>
+      <div class="dnav" data-screen="work" onclick="go('work')">
+        <span class="di"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><line x1="3" y1="13" x2="21" y2="13"/></svg></span>
+        <span class="dlabel">Work Management</span>
+      </div>
+      <div class="dnav" data-screen="reimb" onclick="go('reimb')">
+        <span class="di"><svg viewBox="0 0 24 24"><path d="M3 7v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/><circle cx="16.5" cy="14" r="1.2" fill="currentColor" stroke="none"/></svg></span>
+        <span class="dlabel">Reimbursement</span>
+      </div>
+      <div class="dnav" data-screen="inbox" onclick="go('inbox')">
+        <span class="di"><svg viewBox="0 0 24 24"><path d="M18 16v-5a6 6 0 0 0-4-5.66V5a2 2 0 0 0-4 0v.34A6 6 0 0 0 6 11v5l-1.5 2h15z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg></span>
+        <span class="dlabel">Notifications</span>
+      </div>
+      <div class="dnav" data-screen="suggest" onclick="go('suggest')">
+        <span class="di"><svg viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.4 1 2.3v1h6v-1c0-.9.4-1.8 1-2.3A7 7 0 0 0 12 2z"/></svg></span>
+        <span class="dlabel">Suggestion &amp; Feedback</span>
+      </div>
+      <div class="dnav" onclick="closeDrawer();openTheme()">
+        <span class="di"><svg viewBox="0 0 24 24"><circle cx="13.5" cy="6.5" r="1.4"/><circle cx="17.5" cy="10.5" r="1.4"/><circle cx="8.5" cy="7.5" r="1.4"/><circle cx="6.5" cy="12.5" r="1.4"/><path d="M12 22a10 10 0 1 1 0-20 10 10 0 0 1 10 10 5 5 0 0 1-5 5h-1.8a2 2 0 0 0-1.4 3.4 2 2 0 0 1-1.4 1.6z"/></svg></span>
+        <span class="dlabel">Theme</span>
+      </div>
+      <div class="dnav" onclick="logout()">
+        <span class="di"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>
+        <span class="dlabel">Logout</span>
+      </div>
     </div>
   </div>
 
@@ -313,7 +436,11 @@ textarea.field{resize:none;min-height:88px}
 <script>
 /* =====================  SEED DATA  ===================== */
 const USER = { name:'Andrew Phillips', email:'andrew.phillips@onaqt.com', circle:'Dallas',
-  doj:'2026-05-01', manager:'Victor Stevens', designation:'RF Engineer' };
+  doj:'2026-05-01', manager:'Victor Stevens', designation:'RF Engineer',
+  empId:'EMP-2026-0042', phone:'+1 (214) 555-0142', dob:'1992-03-18',
+  gender:'Male', level:'L2 Engineer', department:'Field Services',
+  workLocation:'Dallas, Texas',
+  emergency:{ name:'Sarah Phillips', relation:'Spouse', phone:'+1 (214) 555-0188' } };
 
 const myTargets = {
   period:'May 2026',
@@ -365,12 +492,49 @@ let claims = [
 ];
 
 let works = [
-  { id:'TX-001', site:'TX-001', project:'AT&T 5G',       circle:'Texas',      stg:'pending',   types:['Installation'],               date:'2026-05-29' },
-  { id:'NY-202', site:'NY-202', project:'Lumen',         circle:'New York',   stg:'completed', types:['Antenna Replace'],            date:'2026-05-20' },
-  { id:'CA-101', site:'CA-101', project:'AT&T 5G',       circle:'California', stg:'pending',   types:['Installation','Site Survey'], date:'2026-05-28' },
-  { id:'TX-030', site:'TX-030', project:'AT&T 5G',       circle:'Texas',      stg:'pending',   types:['Installation','Site Survey'], date:'2026-05-27' },
-  { id:'CA-203', site:'CA-203', project:'Verizon Fiber', circle:'California', stg:'completed', types:['Installation'],               date:'2026-05-15' }
+  { id:'TX-001', site:'TX-001', project:'AT&T 5G',       circle:'Texas',      stg:'pending',   types:['Installation'],               date:'2026-05-26' },
+  { id:'NY-202', site:'NY-202', project:'Lumen',         circle:'New York',   stg:'completed', types:['Antenna Replace'],            date:'2026-05-14' },
+  { id:'CA-101', site:'CA-101', project:'AT&T 5G',       circle:'California', stg:'pending',   types:['Installation','Site Survey'], date:'2026-05-25' },
+  { id:'TX-030', site:'TX-030', project:'AT&T 5G',       circle:'Texas',      stg:'pending',   types:['Installation','Site Survey'], date:'2026-05-19' },
+  { id:'CA-203', site:'CA-203', project:'Verizon Fiber', circle:'California', stg:'completed', types:['Installation'],               date:'2026-05-05' }
 ];
+
+let notifs = [
+  { id:1, type:'success', title:'Claim approved',     body:'CLM-20260514-7045BDDC has been approved by Victor Stevens. Amount: $162.00.',           time:'2 hours ago', read:false },
+  { id:2, type:'info',    title:'New task assigned',  body:'Victor Stevens assigned you a site survey at TX-001. Due May 28, 2026.',                 time:'5 hours ago', read:false },
+  { id:3, type:'warn',    title:'Attendance missing', body:'May 28 marked as Idle — no check-out recorded. Tap to submit a regularization request.', time:'Yesterday',   read:false },
+  { id:4, type:'success', title:'Leave approved',     body:'Your Personal Day for May 23 has been approved.',                                        time:'2 days ago',  read:true,  refDay:23 },
+  { id:5, type:'info',    title:'Material in stock',  body:'Coax Connector N-Type is back in stock. You can resume the TX-030 install.',             time:'3 days ago',  read:true }
+];
+
+function dayLog(d){
+  const st = attendance[d];
+  const ds = String(d).padStart(2,'0') + '-05-2026';
+  const addr = '1842 N Akard St, Dallas, TX 75201, USA';
+  if(st==='p' || st==='s'){
+    return { status:st, inT:'09:14 AM', inD:ds, outT:'06:42 PM', outD:ds, inAddr:addr, outAddr:addr, hrs:'09', mins:'28' };
+  }
+  if(st==='i'){
+    return { status:'i', inT:'08:55 AM', inD:ds, outT:null, outD:null, inAddr:addr, outAddr:null, hrs:'--', mins:'--' };
+  }
+  return null;
+}
+function worksForDay(d){
+  const ds = `2026-05-${String(d).padStart(2,'0')}`;
+  return works.filter(w => w.date === ds);
+}
+function unreadCount(){ return notifs.filter(n=>!n.read).length; }
+
+let suggestions = [
+  { id:1, subject:'Add dark mode for night-shift work',                type:'Feature Request', cat:'App Experience',    status:'Acknowledged', time:'5 days ago' },
+  { id:2, subject:'Allow material request when item is out of stock', type:'Suggestion',      cat:'Work Process',      status:'Resolved',     time:'2 weeks ago' },
+  { id:3, subject:'Helmet inventory short at Texas warehouse',         type:'Bug Report',      cat:'Safety',            status:'Submitted',    time:'1 month ago' }
+];
+let _sugg = { subject:'', type:null, cat:null, desc:'', attached:false };
+
+/* Work Management filter + search state */
+let workFilter = 'all';
+let workSearch = '';
 const MATERIALS = [
   { name:'Abc testing wire 10 m', avail:20, unit:'m' },
   { name:'Earthing Wire 25mm²',   avail:0,  unit:'m' },
@@ -424,14 +588,20 @@ let appbarVisible = false;
 
 const TITLES = { dashboard:'Dashboard', work:'Work Management', reimb:'Reimbursement',
   selfassign:'Self Assigned Work', workdetail:'Details', createclaim:'Create Claim',
-  claimdetail:'Claim Details', leave:'Apply Leave', material:'Material Usage', addtravel:'Add Travel Entry' };
+  claimdetail:'Claim Details', leave:'Apply Leave', material:'Material Usage', addtravel:'Add Travel Entry',
+  attDetail:'Details', workDay:'Details', inbox:'Notifications', regular:'Regularization', profile:'My Profile',
+  suggest:'Suggestion & Feedback', suggestNew:'Submit Feedback' };
 // screens that show a back-arrow instead of hamburger
-const BACKSCREENS = ['selfassign','workdetail','createclaim','claimdetail','leave','material','addtravel'];
+const BACKSCREENS = ['selfassign','workdetail','createclaim','claimdetail','leave','material','addtravel','attDetail','workDay','inbox','regular','profile','suggest','suggestNew'];
 let backTarget = 'dashboard';
+let _lastAttDay = null;
+let _regularFrom = 'dashboard';
 
 function go(screen, opt){
   closeDrawer();
+  if(screen==='regular') _regularFrom = (current==='regular'?'dashboard':(current||'dashboard'));
   current = screen;
+  if(screen==='attDetail') _lastAttDay = opt;
   const ab = document.getElementById('appbar');
   const sb = document.getElementById('statusbar');
   if(screen==='login'){ ab.classList.add('hidden'); sb.classList.add('light'); }
@@ -450,6 +620,9 @@ function go(screen, opt){
 }
 function appNavIconClick(){
   if(current==='material'){ go('workdetail',flowCtx.idx); return; }
+  if(current==='workDay' && _lastAttDay!=null){ go('attDetail', _lastAttDay); return; }
+  if(current==='regular'){ go(_regularFrom); _regularFrom='dashboard'; return; }
+  if(current==='suggestNew'){ go('suggest'); return; }
   BACKSCREENS.includes(current) ? go(backTarget) : openDrawer();
 }
 
@@ -477,10 +650,25 @@ function render(screen, opt){
   else if(screen==='leave')     html=tplLeave();
   else if(screen==='material')  html=tplMaterial();
   else if(screen==='addtravel') html=tplAddTravel();
+  else if(screen==='attDetail') html=tplAttendanceDetail(opt);
+  else if(screen==='workDay')   html=tplWorkDayDetail(opt);
+  else if(screen==='inbox')     html=tplInbox();
+  else if(screen==='regular')   html=tplRegularize(opt);
+  else if(screen==='profile')   html=tplProfile();
+  else if(screen==='suggest')   html=tplSuggest();
+  else if(screen==='suggestNew') html=tplSuggestNew();
   v.innerHTML = '<div class="pad fadein">'+html+'</div>';
   if(screen==='dashboard'){ bindSlider(); renderCalendar(); bindTabSwipe(); requestAnimationFrame(()=>updateTabUI(false)); }
   if(screen==='material'){ updateMatFooter(); }
   if(screen==='createclaim'){ renderDraftLists(); }
+  if(screen==='work'){ enablePtr(refreshWorkList); } else { disablePtr(); }
+  updateBellBadge();
+}
+function updateBellBadge(){
+  const b=document.getElementById('bellBadge'); if(!b) return;
+  const n=unreadCount();
+  if(n>0){ b.style.display='flex'; b.textContent=n>9?'9+':String(n); }
+  else b.style.display='none';
 }
 
 /* ---------- LOGIN ---------- */
@@ -498,7 +686,7 @@ function tplLogin(){
     <div class="fgroup mt16"><input class="field" id="liUser" placeholder="Enter Username" value="andrew.phillips"></div>
     <div class="fgroup mt12" style="position:relative">
       <input class="field" id="liPass" type="password" placeholder="Enter Password" value="demo1234" style="padding-right:44px">
-      <span onclick="togglePass()" style="position:absolute;right:12px;top:11px;cursor:pointer;font-size:16px;color:var(--soft)">👁</span>
+      <span onclick="togglePass()" style="position:absolute;right:12px;top:11px;cursor:pointer;color:var(--soft);display:flex;align-items:center;line-height:1">${ic('eye',18)}</span>
     </div>
     <div style="text-align:right;font-size:12px;color:var(--p);font-weight:700;margin-top:8px;cursor:pointer" onclick="toast('Password reset link sent (demo)')">Forgot your password?</div>
     <button class="btn mt16" onclick="doLogin()">Login</button>
@@ -522,7 +710,7 @@ function tplDashboard(){
     <span class="chip ok" style="cursor:pointer" onclick="openLeave()">Apply Leave</span>
   </div>
   <div class="locrow" onclick="captureLoc()">
-    <span class="locicon">📍</span>
+    <span class="locicon">${ic('pin',16)}</span>
     <span id="locText" class="${state.locCaptured?'capd':''}">${state.locCaptured?'Location captured · 30.7335, 76.7794':'Get my current latitude and longitude'}</span>
   </div>
 
@@ -740,7 +928,7 @@ function renderCalendar(){
         const d = slot - first + 1;
         const st = (state.calMonth===4&&state.calYear===2026)?(attendance[d]||'u'):'u';
         const [bg,tx]=colors[st]||colors.u;
-        body+=`<td class="cal-cell" style="background:${bg};color:${tx}">${String(d).padStart(2,'0')}</td>`;
+        body+=`<td class="cal-cell" style="background:${bg};color:${tx};cursor:pointer" onclick="go('attDetail',${d})">${String(d).padStart(2,'0')}</td>`;
       }
     }
     body+='</tr>';
@@ -777,7 +965,7 @@ function captureLoc(){ state.locCaptured=true; const el=document.getElementById(
 function tplSlider(){
   const done=state.dayStarted;
   return `<div class="slider ${done?'done':''}" id="slider">
-    <span class="knob" id="knob">${done?'■':'→'}</span>
+    <span class="knob" id="knob">${done?ic('check',22):ic('arrowR',22)}</span>
     <span id="sliderLabel">${done?'Slide to End Day':'Slide to Start Day'}</span>
   </div>`;
 }
@@ -804,24 +992,68 @@ function bindSlider(){
 /* ---------- WORK MANAGEMENT ---------- */
 function tplWork(){
   return `
+  <div id="ptr" class="ptr"><span class="ptr-spin">${ic('refresh',16)}</span><span id="ptrText">Pull to refresh</span></div>
+
   <div class="card list-cta" onclick="go('selfassign')">
     <span class="plus">+</span>
     <div class="grow"><div style="font-weight:800;font-size:14px;color:var(--p)">SELF WORK ASSIGN</div>
       <div class="muted" style="font-size:12px">Create New Work Assignment</div></div>
     <span class="muted" style="font-size:20px">›</span>
   </div>
-  <div class="sectlabel">Assigned Work</div>
-  ${works.map((w,i)=>`
-    <div class="card" style="padding:15px;cursor:pointer" onclick="go('workdetail',${i})">
-      <div class="between"><span style="font-weight:800;font-size:16px">${w.id}</span>
+
+  <div class="search-wrap mt12">
+    <span class="search-ic">${ic('search',16)}</span>
+    <input class="search-input" id="workSearchInp" placeholder="Search by site or project" value="${workSearch}" oninput="setWorkSearch(this.value)">
+    <span class="search-clear" onclick="setWorkSearch('')" style="display:${workSearch?'flex':'none'}">×</span>
+  </div>
+
+  <div class="seg mt12" id="workChips">
+    ${[['all','All'],['pending','Pending'],['active','Active'],['completed','Completed']].map(([f,lbl])=>
+      `<button class="${workFilter===f?'on':''}" data-filter="${f}" onclick="setWorkFilter('${f}')">${lbl}</button>`).join('')}
+  </div>
+
+  <div class="mt12" id="workList">${renderWorkList()}</div>`;
+}
+function renderWorkList(){
+  const q = workSearch.trim().toLowerCase();
+  const items = works
+    .map((w,i)=>({w,i}))
+    .filter(({w}) => {
+      if(workFilter==='all') return true;
+      if(workFilter==='active') return w.stg==='accepted' || w.stg==='inprogress';
+      return w.stg===workFilter;
+    })
+    .filter(({w}) => !q || w.id.toLowerCase().includes(q) || w.site.toLowerCase().includes(q) || w.project.toLowerCase().includes(q));
+  if(!items.length){
+    return `<div class="empty" style="padding:32px 16px">No work items match your filter.</div>`;
+  }
+  return items.map(({w,i},idx)=>`
+    <div class="card${idx>0?' mt12':''}" style="padding:14px;cursor:pointer" onclick="go('workdetail',${i})">
+      <div class="between"><span style="font-weight:700;font-size:15px">${w.id}</span>
         <span class="chip ${stgChip(w.stg)}">${stgLabel(w.stg)}</span></div>
-      <div class="mt10" style="font-size:13px"><span class="muted">Site ID:</span> <b>${w.site}</b></div>
-      <div class="mt6" style="font-size:13px"><span class="muted">Project:</span> <b>${w.project}</b></div>
-      <div class="mt10" style="display:flex;gap:7px;flex-wrap:wrap;align-items:center">
-        <span class="muted" style="font-size:13px">Types:</span>
+      <div class="mt8" style="font-size:13px"><span class="muted">Site ID:</span> <b style="font-weight:700">${w.site}</b></div>
+      <div class="mt4" style="font-size:13px"><span class="muted">Project:</span> <b style="font-weight:700">${w.project}</b></div>
+      <div class="mt8" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+        <span class="muted" style="font-size:12px">Types:</span>
         ${w.types.map(t=>`<span class="chip neutral">${t}</span>`).join('')}
       </div>
-    </div>`).join('')}`;
+    </div>`).join('');
+}
+function setWorkFilter(f){
+  workFilter = f;
+  document.querySelectorAll('#workChips button').forEach(b => b.classList.toggle('on', b.dataset.filter===f));
+  const list = document.getElementById('workList'); if(list) list.innerHTML = renderWorkList();
+}
+function setWorkSearch(v){
+  workSearch = v;
+  const inp = document.getElementById('workSearchInp'); if(inp && inp.value!==v) inp.value=v;
+  const clr = document.querySelector('.search-clear'); if(clr) clr.style.display = v ? 'flex' : 'none';
+  const list = document.getElementById('workList'); if(list) list.innerHTML = renderWorkList();
+}
+function refreshWorkList(){
+  // Demo refresh — simulates a server reload
+  const list = document.getElementById('workList'); if(list) list.innerHTML = renderWorkList();
+  toast('Work list updated');
 }
 function tplWorkDetail(i){
   backTarget='work'; flowCtx.idx=i; const w=works[i];
@@ -878,10 +1110,10 @@ function startWorkBody(){
   const photoBlock = flowCtx.photo
     ? `<div style="text-align:center"><div class="photo-thumb">✓&nbsp; Photo captured</div></div>
        <div class="card mt16" style="background:var(--card2);display:flex;gap:11px;align-items:flex-start">
-         <span style="color:var(--p);font-size:18px">📍</span>
+         <span style="color:var(--p);display:inline-flex;align-items:center">${ic('pin',18)}</span>
          <div><div class="label">Location</div><div style="font-weight:700;margin-top:4px">30.753485, 76.7418167</div></div></div>`
     : `<div style="text-align:center;padding:6px 0 2px">
-         <div class="photo-circle" onclick="capturePhoto()">📷</div>
+         <div class="photo-circle" onclick="capturePhoto()">${ic('camera',32)}</div>
          <div class="muted mt12" style="font-size:13px">Tap to take photo</div></div>`;
   return `${photoBlock}
     <div class="row mt20"><button class="btn danger grow" onclick="closeSheet()">Cancel</button>
@@ -902,7 +1134,7 @@ function openEndWork(i){ flowCtx.idx=i;
 function endWorkBody(){
   const opt=(v)=>`<label class="selrow" onclick="setEndStatus('${v}')"><span class="cbx ${flowCtx.status===v?'on':''}">${flowCtx.status===v?'✓':''}</span> ${v}</label>`;
   return `<div class="card" style="background:var(--card2);display:flex;gap:11px;align-items:flex-start">
-      <span style="color:var(--p);font-size:18px">📍</span>
+      <span style="color:var(--p);display:inline-flex;align-items:center">${ic('pin',18)}</span>
       <div><div class="label">Work Location</div><div style="font-weight:700;margin-top:4px">30.753485, 76.7418167</div></div></div>
     <textarea class="field mt12" placeholder="Enter Remarks"></textarea>
     <div class="label mt16" style="margin-bottom:4px">Select Status</div>
@@ -928,7 +1160,7 @@ function tplMaterial(){
     </div>`;
   }).join('');
   return `
-  <input class="field" placeholder="🔍  Search by name or unit" value="${matSearch}" oninput="filterMat(this.value)">
+  <div class="search-wrap"><span class="search-ic">${ic('search',16)}</span><input class="search-input" placeholder="Search by name or unit" value="${matSearch}" oninput="filterMat(this.value)"></div>
   <div class="muted mt12" style="font-size:12px">${MATERIALS.length} materials</div>
   <div id="matList" class="mt8">${list}</div>
   <div class="actionbar">
@@ -984,7 +1216,7 @@ function tplReimb(){
       <div class="between"><span style="font-weight:700;font-size:13px">${c.id}</span><span class="muted" style="font-size:18px">›</span></div>
       <div class="row mt8" style="align-items:center;gap:8px;flex-wrap:wrap">
         <span class="chip info">${c.status}</span>
-        <span class="muted" style="font-size:12px">📅 ${fmt(c.date)}</span>
+        <span class="muted" style="font-size:12px;display:inline-flex;align-items:center;gap:6px">${ic('calendar',14)}${fmt(c.date)}</span>
         <span class="chip neutral" style="margin-left:auto">${c.type}</span>
       </div>
       <div class="row mt12">
@@ -1015,7 +1247,7 @@ function tplClaimDetail(i){
     </div>
   </div>
   <div class="card mt12">
-    <div style="font-weight:800;font-size:15px">📄 Basic Information</div>
+    <div style="font-weight:800;font-size:15px;display:flex;align-items:center;gap:8px">${ic('doc',16)} Basic Information</div>
     <div class="row mt12">
       <div class="grow"><div class="label">Date</div><div style="font-weight:700;margin-top:4px">${c.date}</div></div>
       <div class="grow"><div class="label">Category</div><div style="font-weight:700;margin-top:4px">${c.type}</div></div>
@@ -1026,7 +1258,7 @@ function tplClaimDetail(i){
     </div>
   </div>
   <div class="card mt12">
-    <div class="between"><span style="font-weight:800;font-size:15px">📍 Sites & Expenses</span><span class="chip ok">${c.sitesData.length} Site${c.sitesData.length>1?'s':''}</span></div>
+    <div class="between"><span style="font-weight:800;font-size:15px;display:flex;align-items:center;gap:8px">${ic('pin',16)} Sites &amp; Expenses</span><span class="chip ok">${c.sitesData.length} Site${c.sitesData.length>1?'s':''}</span></div>
     ${c.sitesData.map((s,si)=>{
       const sTotal=s.items.reduce((a,it)=>a+it.amt,0);
       const open=expandedSites.has(i+'-'+si);
@@ -1053,7 +1285,7 @@ function tplCreateClaim(){
   if(!draft) draft={type:'Local',multi:false,date:'2026-05-30',site:'',project:'',circle:'',remarks:'',items:[]};
   const single=!draft.multi, local=draft.type!=='Outstation';
   return `
-  <div class="card"><div class="label" style="display:flex;align-items:center;gap:7px">📅 Date</div>
+  <div class="card"><div class="label" style="display:flex;align-items:center;gap:6px">${ic('calendar',12)} Date</div>
     <input class="field mt8" type="date" value="${draft.date}" onchange="draft.date=this.value"></div>
 
   <div class="card"><div class="label">Select Site</div>
@@ -1061,8 +1293,8 @@ function tplCreateClaim(){
     ${single ? `
     <select class="field mt12" id="ccSite" onchange="draft.site=this.value"><option value="" ${draft.site?'':'selected'} disabled>Select Site</option>${opts(SITES,draft.site)}</select>
     ` : `
-    <div class="pickfield mt12" onclick="openPurpose()"><span class="${draft.purpose?'':'ph'}">${draft.purpose||'Purpose'}</span><span class="chev2">⌄</span></div>
-    <div class="pickfield mt10" onclick="openProjectPick()"><span class="${draft.project?'':'ph'}">${draft.project||'Project'}</span><span class="chev2">⌄</span></div>
+    <div class="pickfield mt12" onclick="openPurpose()"><span class="${draft.purpose?'':'ph'}">${draft.purpose||'Purpose'}</span><span class="chev2">${ic('chevDown',16)}</span></div>
+    <div class="pickfield mt10" onclick="openProjectPick()"><span class="${draft.project?'':'ph'}">${draft.project||'Project'}</span><span class="chev2">${ic('chevDown',16)}</span></div>
     <button class="addsite mt12" onclick="openSitePicker()">Add Site</button>
     <div class="mt10">${(draft.sites||[]).map((s,k)=>`<div class="added-item"><span>${s}</span><span class="x" onclick="removeSite(${k})">×</span></div>`).join('')}</div>
     `}
@@ -1105,7 +1337,7 @@ function setExp(t){ draft.type=t;
 
 /* ---- multi-site pickers ---- */
 function pickerSheet(title, list, handler){
-  openFlowSheet(title, `<input class="field" placeholder="🔍  Search" oninput="filterPickerList(this.value)">
+  openFlowSheet(title, `<div class="search-wrap"><span class="search-ic">${ic('search',16)}</span><input class="search-input" placeholder="Search" oninput="filterPickerList(this.value)"></div>
     <div id="pickerList" class="mt12">${list.map(x=>`<div class="pick-row" data-v="${x.toLowerCase()}" onclick="${handler}('${x.replace(/'/g,"\\'")}')">${x}</div>`).join('')}</div>`);
 }
 function filterPickerList(v){ const ql=v.toLowerCase(); document.querySelectorAll('#pickerList .pick-row').forEach(r=>{ r.style.display=r.dataset.v.includes(ql)?'':'none'; }); }
@@ -1115,7 +1347,7 @@ function openProjectPick(){ pickerSheet('Select Project', PROJECTS, 'pickProject
 function pickProject(v){ draft.project=v; closeSheet(); go('createclaim'); }
 function openSitePicker(){ pendingSites=(draft.sites||[]).slice(); openFlowSheet('Select Site', sitePickerBody()); }
 function sitePickerBody(){
-  return `<input class="field" placeholder="🔍  Search" oninput="filterPickerList(this.value)">
+  return `<div class="search-wrap"><span class="search-ic">${ic('search',16)}</span><input class="search-input" placeholder="Search" oninput="filterPickerList(this.value)"></div>
     <div id="pickerList" class="mt12">${SITES.map(s=>`<div class="pick-row" data-v="${s.toLowerCase()}" onclick="toggleSiteSel('${s.replace(/'/g,"\\'")}')">
       <span class="cbx ${pendingSites.includes(s)?'on':''}">${pendingSites.includes(s)?'✓':''}</span><span>${s}</span></div>`).join('')}</div>
     <button class="btn mt16" onclick="confirmSites()">Submit</button>`;
@@ -1213,7 +1445,7 @@ function tplLeave(){
   <div class="fgroup"><div class="flabel">Reason *</div><textarea class="field" id="lvReason" placeholder="Enter reason"></textarea></div>
   <div class="fgroup">
     <div class="label" style="margin-bottom:8px">Attachment (Optional)</div>
-    <div class="field" style="display:flex;align-items:center;gap:11px;cursor:pointer" onclick="toast('File picker (demo)')"><span style="color:var(--p);font-size:18px">📎</span><span class="muted">No file selected</span></div>
+    <div class="field" style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="toast('File picker (demo)')"><span style="color:var(--p);display:inline-flex;align-items:center">${ic('clip',18)}</span><span class="muted">No file selected</span></div>
     <div class="muted" style="font-size:12px;margin-top:8px">Supported: PDF, JPG, PNG (Max 5MB)</div>
   </div>
   <button class="btn mt20" onclick="submitLeave()">Submit Leave Request</button>`;
@@ -1233,14 +1465,374 @@ function renderSheet(){
       <span class="tname">${t.name}</span><span class="tick">✓</span></div>`;
   }).join('');
   const appearance = `<div class="label" style="padding:18px 14px 6px">Appearance</div>` +
-    [['light','☀️','Light'],['dark','🌙','Dark']].map(([m,ic,nm])=>`
+    [['light','sun','Light'],['dark','moon','Dark']].map(([m,iconName,nm])=>`
       <div class="theme-row ${state.mode===m?'sel':''}" onclick="pickMode('${m}')">
-        <span style="width:42px;text-align:center;font-size:22px">${ic}</span>
+        <span style="width:42px;display:flex;align-items:center;justify-content:center;color:var(--soft)">${ic(iconName,22)}</span>
         <span class="tname">${nm}</span><span class="tick">✓</span></div>`).join('');
   b.innerHTML = rows + appearance;
 }
 function pickTheme(k){ state.theme=k; applyTheme(); renderSheet(); }
 function pickMode(m){ state.mode=m; applyTheme(); renderSheet(); }
+
+/* ---------- ATTENDANCE DETAIL ---------- */
+function tplAttendanceDetail(d){
+  const log = dayLog(d);
+  const wks = worksForDay(d);
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const dateLabel = `${months[4]} ${d}, 2026`;
+  const inT  = log ? log.inT  : '--:--';
+  const inD  = log ? log.inD  : 'Date not found';
+  const outT = log && log.outT ? log.outT : (log ? 'Date not found' : '--:--');
+  const outD = log && log.outD ? log.outD : '';
+  const inAddr  = log ? log.inAddr  : 'Address not found';
+  const outAddr = log && log.outAddr ? log.outAddr : 'Address not found';
+  const hrs  = log ? log.hrs  : '--';
+  const mins = log ? log.mins : '--';
+  const isIncomplete = !log || !log.outT;
+  const stMap = {p:'Present', s:'Submitted', i:'Idle'};
+  const stCls = {p:'ok', s:'info', i:'warn'};
+  const statusChip = log ? `<span class="chip ${stCls[log.status]||'neutral'}">${stMap[log.status]||log.status}</span>` : '<span class="chip neutral">No Data</span>';
+
+  return `
+  <div class="between" style="margin-bottom:12px">
+    <div>
+      <div style="font-size:20px;font-weight:800;letter-spacing:-.01em">${dateLabel}</div>
+      <div class="muted" style="font-size:12px;margin-top:2px">Attendance details</div>
+    </div>
+    ${statusChip}
+  </div>
+
+  <div class="card ad-card">
+    <div class="ad-hours-block">
+      <div class="label">Working Hours</div>
+      <div class="ad-clock">${hrs}<span class="ad-colon">:</span>${mins}</div>
+      <div class="ad-clock-sub">hrs : mins</div>
+    </div>
+    <div class="ad-row">
+      <div>
+        <div class="label">Check-in Time</div>
+        <div class="ad-val ${log?'':'muted'}">${log? inT+'  '+inD : 'Date not found'}</div>
+      </div>
+      <div>
+        <div class="label">Check-out Time</div>
+        <div class="ad-val ${log&&log.outT?'':'muted'}">${log&&log.outT? outT+'  '+outD : 'Date not found'}</div>
+      </div>
+    </div>
+    <div class="ad-row">
+      <div>
+        <div class="label">Check In Address</div>
+        <div class="ad-val ad-addr ${log?'':'muted'}">${inAddr}</div>
+      </div>
+      <div>
+        <div class="label">Check Out Address</div>
+        <div class="ad-val ad-addr ${log&&log.outAddr?'':'muted'}">${outAddr}</div>
+      </div>
+    </div>
+  </div>
+
+  ${isIncomplete ? `
+  <button class="btn ghost mt12" onclick="go('regular',${d})">Request Regularization</button>` : ''}
+
+  ${wks.length ? `
+  <div class="sectlabel">Work Details</div>
+  ${wks.map((w,i)=>`
+    <div class="card${i>0?' mt12':''}" style="cursor:pointer" onclick="go('workDay','${w.id}')">
+      <div class="between">
+        <div style="min-width:0;flex:1">
+          <div style="font-weight:700;font-size:15px">${w.id}</div>
+          <div class="muted mt8" style="font-size:12px">Site ID: <b style="color:var(--text);font-weight:700">${w.site}</b></div>
+          <div class="muted mt4" style="font-size:12px">Project: <b style="color:var(--text);font-weight:700">${w.project}</b></div>
+          <div class="muted mt8" style="font-size:12px">Types: ${w.types.map(t=>`<span class="chip neutral" style="margin-right:4px">${t}</span>`).join('')}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+          <span class="chip ${stgChip(w.stg)}">${stgLabel(w.stg).toUpperCase()}</span>
+          <span class="chev2">›</span>
+        </div>
+      </div>
+    </div>`).join('')}` : ''}`;
+}
+
+/* ---------- WORK-OF-DAY DETAIL ---------- */
+function tplWorkDayDetail(workId){
+  const w = works.find(x=>x.id===workId);
+  if(!w) return `<div class="empty">Work not found</div>`;
+  const st = stgLabel(w.stg).toUpperCase();
+  const stC = stgChip(w.stg);
+  return `
+  <div style="margin-bottom:12px">
+    <div style="font-size:22px;font-weight:800;letter-spacing:-.01em">${w.id}</div>
+    <div class="muted" style="font-size:13px;margin-top:2px">${w.site}</div>
+  </div>
+
+  <div class="card">
+    <div class="between" style="margin-bottom:12px">
+      <div style="font-weight:700;font-size:15px">Site Information</div>
+      <span class="chip ${stC}">${st}</span>
+    </div>
+    <div class="row" style="gap:8px">
+      <div class="ad-inner">
+        <div class="label">Project</div>
+        <div class="ad-inner-val">${w.project}</div>
+      </div>
+      <div class="ad-inner">
+        <div class="label">Circle</div>
+        <div class="ad-inner-val">${w.circle}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sectlabel">Work Types</div>
+  ${w.types.map((t,i)=>`
+    <div class="card${i>0?' mt12':''}">
+      <div class="between">
+        <div>
+          <div style="font-weight:700;font-size:15px">${t}</div>
+          <div class="muted mt4" style="font-size:12px">${fmt(w.date)}</div>
+        </div>
+        <span class="chip ${stC}">${st}</span>
+      </div>
+    </div>`).join('')}`;
+}
+
+/* ---------- INBOX ---------- */
+function tplInbox(){
+  if(!notifs.length) return `<div class="empty">No notifications yet</div>`;
+  const unr = unreadCount();
+  return `
+  <div class="between" style="margin-bottom:12px">
+    <div>
+      <div style="font-size:20px;font-weight:800">Notifications</div>
+      <div class="muted" style="font-size:12px;margin-top:2px">${unr?unr+' unread':'All caught up'}</div>
+    </div>
+    ${unr?`<span class="chip info" style="cursor:pointer" onclick="markAllRead()">Mark all read</span>`:''}
+  </div>
+  <div class="card" style="padding:0;overflow:hidden">
+    ${notifs.map(n=>{
+      const _ico = n.type==='success'?ic('check',16):n.type==='warn'?ic('alert',16):ic('info',16);
+      const action = n.type==='warn' && n.refDay==null
+        ? `onclick="markNotifRead(${n.id}); go('regular',28)"` : `onclick="markNotifRead(${n.id})"`;
+      return `<div class="notif ${n.read?'read':'unread'}" ${action}>
+        <div class="notif-ic ${n.type}">${_ico}</div>
+        <div class="notif-body">
+          <div class="notif-title">${n.title}</div>
+          <p>${n.body}</p>
+          <div class="notif-time">${n.time}</div>
+        </div>
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+function markNotifRead(id){ const n=notifs.find(x=>x.id===id); if(n){ n.read=true; render('inbox'); } }
+function markAllRead(){ notifs.forEach(n=>n.read=true); render('inbox'); }
+
+/* ---------- REGULARIZATION ---------- */
+let _regular={ day:null, type:null, reason:'', attached:false };
+function tplRegularize(d){
+  _regular.day = d || _regular.day;
+  const types = ['Missing Check-in','Missing Check-out','Wrong Punch Time','Forgot to Punch','Out of Office'];
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const dateLabel = _regular.day ? `${months[4]} ${_regular.day}, 2026` : '—';
+  return `
+  <div style="margin-bottom:12px">
+    <div style="font-size:20px;font-weight:800">Regularization Request</div>
+    <div class="muted" style="font-size:12px;margin-top:2px">Submit a correction for an incomplete day</div>
+  </div>
+  <div class="card">
+    <div class="fgroup">
+      <div class="flabel">Date</div>
+      <input class="field" value="${dateLabel}" readonly style="color:var(--soft)">
+    </div>
+    <div class="fgroup mt12">
+      <div class="flabel">Issue Type</div>
+      <select class="field" id="regType" onchange="_regular.type=this.value">
+        <option value="" ${_regular.type?'':'selected'} disabled>Select Issue Type</option>
+        ${types.map(t=>`<option ${t===_regular.type?'selected':''}>${t}</option>`).join('')}
+      </select>
+    </div>
+    <div class="fgroup mt12">
+      <div class="flabel">Reason</div>
+      <textarea class="field" id="regReason" placeholder="Explain what happened" oninput="_regular.reason=this.value">${_regular.reason||''}</textarea>
+    </div>
+    <div class="fgroup mt12">
+      <div class="flabel">Supporting Document (optional)</div>
+      <div class="addsite" onclick="_regular.attached=true;toast('Receipt attached (demo)');this.textContent='✓ Attached'">${_regular.attached?'✓ Attached':'+ Attach a photo'}</div>
+    </div>
+  </div>
+  <button class="btn mt16" onclick="submitRegularize()">Submit Request</button>`;
+}
+function submitRegularize(){
+  if(!_regular.type){ toast('Please select an issue type'); return; }
+  if(!_regular.reason || _regular.reason.trim().length<5){ toast('Please add a brief reason'); return; }
+  toast('Regularization request submitted');
+  _regular={ day:null, type:null, reason:'', attached:false };
+  go('dashboard');
+}
+
+/* ---------- PROFILE (read-only, HR-managed) ---------- */
+function tplProfile(){
+  const u = USER;
+  const initials = u.name.split(' ').map(s=>s[0]).join('').slice(0,2).toUpperCase();
+  const row = (label,val)=>`<div class="pr-row"><span class="pr-label">${label}</span><span class="pr-val">${val||'—'}</span></div>`;
+  return `
+  <div class="pr-hero">
+    <div class="pr-avatar">${initials}</div>
+    <div class="pr-name">${u.name}</div>
+    <div class="pr-sub">${u.designation} · ${u.level}</div>
+    <div class="pr-eid">${u.empId}</div>
+  </div>
+
+  <div class="pr-section">Personal Information</div>
+  <div class="card">
+    ${row('Email',         u.email)}
+    ${row('Phone',         u.phone)}
+    ${row('Date of Birth', fmt(u.dob))}
+    ${row('Gender',        u.gender)}
+  </div>
+
+  <div class="pr-section">Employment</div>
+  <div class="card">
+    ${row('Employee ID',       u.empId)}
+    ${row('Designation',       u.designation)}
+    ${row('Level',             u.level)}
+    ${row('Department',        u.department)}
+    ${row('Reporting Manager', u.manager)}
+    ${row('Date of Joining',   fmt(u.doj))}
+    ${row('Work Location',     u.workLocation)}
+  </div>
+
+  <div class="pr-section">Emergency Contact</div>
+  <div class="card">
+    ${row('Name',     u.emergency.name)}
+    ${row('Relation', u.emergency.relation)}
+    ${row('Phone',    u.emergency.phone)}
+  </div>
+
+  <div class="pr-note"><span style="display:inline-flex;align-items:center;vertical-align:-3px;margin-right:6px">${ic('lock',13)}</span>Read-only · Managed by HR in iHRMS. To update any of these details, please contact your HR team.</div>`;
+}
+
+/* ---------- SUGGESTION & FEEDBACK ---------- */
+function tplSuggest(){
+  const stMap = {'Submitted':'warn','Acknowledged':'info','Resolved':'ok','Closed':'neutral'};
+  return `
+  <div class="card list-cta" onclick="startSuggest()">
+    <span class="plus">${ic('bulb',20)}</span>
+    <div class="grow">
+      <div style="font-weight:800;font-size:14px;color:var(--p)">SUBMIT FEEDBACK</div>
+      <div class="muted" style="font-size:12px">Share an idea or report an issue</div>
+    </div>
+    <span class="muted" style="font-size:20px">›</span>
+  </div>
+
+  <div class="sectlabel">My Submissions</div>
+  ${suggestions.length ? `
+  <div class="card" style="padding:0;overflow:hidden">
+    ${suggestions.map(s=>`
+      <div class="sugg-row">
+        <div style="min-width:0;flex:1">
+          <div class="sugg-subj">${s.subject}</div>
+          <div class="sugg-meta">${s.type} · ${s.cat}</div>
+          <div class="sugg-time">${s.time}</div>
+        </div>
+        <span class="chip ${stMap[s.status]||'neutral'}">${s.status}</span>
+      </div>`).join('')}
+  </div>` : `
+  <div class="card">
+    <div class="empty" style="padding:20px 0">No feedback submitted yet.<br><span style="font-size:12px">Tap "Submit Feedback" to share your first one.</span></div>
+  </div>`}`;
+}
+
+function startSuggest(){
+  _sugg = { subject:'', type:null, cat:null, desc:'', attached:false };
+  go('suggestNew');
+}
+
+function tplSuggestNew(){
+  const types = ['Suggestion','Bug Report','Feature Request','Compliment','Complaint'];
+  const cats  = ['App Experience','Work Process','HR Policy','Tools & Equipment','Safety','Other'];
+  return `
+  <div class="card">
+    <div class="fgroup">
+      <div class="flabel">Subject</div>
+      <input class="field" id="sgSubject" placeholder="Briefly describe your feedback" value="${_sugg.subject||''}" oninput="_sugg.subject=this.value">
+    </div>
+    <div class="fgroup mt12">
+      <div class="flabel">Type</div>
+      <select class="field" id="sgType" onchange="_sugg.type=this.value">
+        <option value="" ${_sugg.type?'':'selected'} disabled>Select Type</option>
+        ${types.map(t=>`<option ${t===_sugg.type?'selected':''}>${t}</option>`).join('')}
+      </select>
+    </div>
+    <div class="fgroup mt12">
+      <div class="flabel">Category</div>
+      <select class="field" id="sgCat" onchange="_sugg.cat=this.value">
+        <option value="" ${_sugg.cat?'':'selected'} disabled>Select Category</option>
+        ${cats.map(c=>`<option ${c===_sugg.cat?'selected':''}>${c}</option>`).join('')}
+      </select>
+    </div>
+    <div class="fgroup mt12">
+      <div class="flabel">Description</div>
+      <textarea class="field" id="sgDesc" placeholder="Share more details — what's happening, what would help, etc." oninput="_sugg.desc=this.value">${_sugg.desc||''}</textarea>
+    </div>
+    <div class="fgroup mt12">
+      <div class="flabel">Attach Screenshot (optional)</div>
+      <div class="addsite" onclick="_sugg.attached=true;toast('Screenshot attached (demo)');this.textContent='✓ Attached'">${_sugg.attached?'✓ Attached':'+ Attach a screenshot'}</div>
+    </div>
+  </div>
+  <button class="btn mt16" onclick="submitSuggestion()">Submit Feedback</button>`;
+}
+function submitSuggestion(){
+  if(!_sugg.subject || _sugg.subject.trim().length<3){ toast('Please add a subject'); return; }
+  if(!_sugg.type){ toast('Please select a type'); return; }
+  if(!_sugg.desc || _sugg.desc.trim().length<5){ toast('Please add a description'); return; }
+  suggestions.unshift({ id:Date.now(), subject:_sugg.subject, type:_sugg.type, cat:_sugg.cat||'Other',
+    status:'Submitted', time:'Just now' });
+  toast('Feedback submitted — thank you!');
+  _sugg = { subject:'', type:null, cat:null, desc:'', attached:false };
+  go('suggest');
+}
+
+/* ---------- PULL-TO-REFRESH ---------- */
+const PTR = { threshold:64, active:false, startY:0, dy:0, refreshing:false, refreshFn:null };
+function enablePtr(fn){ PTR.refreshFn = fn; }
+function disablePtr(){ PTR.refreshFn = null; PTR.active=false; PTR.dy=0; PTR.refreshing=false; }
+document.addEventListener('pointerdown', e=>{
+  if(!PTR.refreshFn || PTR.refreshing) return;
+  const view = document.getElementById('view');
+  if(!view || !view.contains(e.target)) return;
+  if(view.scrollTop > 0) return;
+  PTR.active = true; PTR.startY = e.clientY; PTR.dy = 0;
+});
+document.addEventListener('pointermove', e=>{
+  if(!PTR.active) return;
+  const dy = e.clientY - PTR.startY;
+  if(dy <= 0){ PTR.dy = 0; ptrSet(0,'Pull to refresh',false,true); return; }
+  PTR.dy = Math.min(dy, PTR.threshold*2);
+  e.preventDefault();
+  const eff = PTR.dy * 0.55;
+  ptrSet(eff, eff >= PTR.threshold ? 'Release to refresh' : 'Pull to refresh', false, true);
+});
+document.addEventListener('pointerup', ()=>{
+  if(!PTR.active) return;
+  const dy = PTR.dy; PTR.active = false;
+  if(dy >= PTR.threshold && PTR.refreshFn){
+    PTR.refreshing = true;
+    ptrSet(PTR.threshold, 'Refreshing…', true, false);
+    setTimeout(()=>{
+      PTR.refreshFn && PTR.refreshFn();
+      PTR.refreshing = false; PTR.dy = 0; ptrSet(0,'Pull to refresh',false,false);
+    }, 650);
+  } else {
+    PTR.dy = 0; ptrSet(0,'Pull to refresh',false,false);
+  }
+});
+function ptrSet(px, text, spinning, instant){
+  const el = document.getElementById('ptr'); if(!el) return;
+  el.style.transition = instant ? 'none' : 'height .25s ease-out, opacity .15s';
+  el.style.height = px + 'px';
+  el.style.opacity = px > 4 ? '1' : '0';
+  el.classList.toggle('spinning', !!spinning);
+  const t = document.getElementById('ptrText'); if(t) t.textContent = text;
+}
 
 /* ---------- helpers ---------- */
 function money(n){ return Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
@@ -1256,6 +1848,34 @@ function openFlowSheet(title, body){
 }
 function fmt(d){ const m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const x=new Date(d); return m[x.getMonth()]+' '+x.getDate()+', '+x.getFullYear(); }
+
+/* ---------- ICON SET (Lucide-style line icons) ---------- */
+function ic(name, size){
+  const s = size || 16;
+  const a = `width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"`;
+  const P = {
+    eye:      '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>',
+    pin:      '<path d="M12 22s-7-6.6-7-12a7 7 0 0 1 14 0c0 5.4-7 12-7 12z"/><circle cx="12" cy="10" r="2.5"/>',
+    refresh:  '<polyline points="23 4 23 10 17 10"/><path d="M20.5 15A9 9 0 1 1 18.36 5.64L23 10"/>',
+    search:   '<circle cx="11" cy="11" r="7"/><line x1="20" y1="20" x2="16.65" y2="16.65"/>',
+    camera:   '<path d="M21 19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3l2-3h4l2 3h3a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="3.5"/>',
+    calendar: '<rect x="3" y="5" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/>',
+    doc:      '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/>',
+    chevDown: '<polyline points="6 9 12 15 18 9"/>',
+    arrowR:   '<line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>',
+    clip:     '<path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>',
+    sun:      '<circle cx="12" cy="12" r="4"/><line x1="12" y1="3" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="21"/><line x1="3" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="21" y2="12"/><line x1="5.6" y1="5.6" x2="6.9" y2="6.9"/><line x1="17.1" y1="17.1" x2="18.4" y2="18.4"/><line x1="5.6" y1="18.4" x2="6.9" y2="17.1"/><line x1="17.1" y1="6.9" x2="18.4" y2="5.6"/>',
+    moon:     '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>',
+    lock:     '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+    bulb:     '<path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.4 1 2.3v1h6v-1c0-.9.4-1.8 1-2.3A7 7 0 0 0 12 2z"/>',
+    check:    '<polyline points="20 6 9 17 4 12"/>',
+    alert:    '<path d="M10.3 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r="0.6" fill="currentColor" stroke="none"/>',
+    info:     '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="11"/><circle cx="12" cy="8" r="0.6" fill="currentColor" stroke="none"/>',
+    play:     '<polygon points="6 4 20 12 6 20 6 4" fill="currentColor"/>',
+    stop:     '<rect x="6" y="6" width="12" height="12" rx="1" fill="currentColor" stroke="none"/>'
+  };
+  return `<svg ${a}>${P[name]||''}</svg>`;
+}
 
 /* ---------- boot ---------- */
 applyTheme();
